@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-g)w9d0yb+m092r(u1l88gp)k2v4xs)nn3qrh9yl#pv=e+n%ov4"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -180,3 +180,14 @@ SIMPLE_JWT = {
 
 
 AUTH_USER_MODEL = "entity.Entity"  # Modèle utilisateur personnalisé
+
+
+# Si tu es derrière un proxy comme nginx-proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Force l'utilisation de HTTPS pour les cookies CSRF et SESSION
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# Autorise les domaines valides
+CSRF_TRUSTED_ORIGINS = ['https://staging.crdigital.tech']

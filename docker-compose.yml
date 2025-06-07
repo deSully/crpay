@@ -1,39 +1,39 @@
 version: '3.8'
 
 services:
-  # nginx-proxy:
-  #   image: nginxproxy/nginx-proxy:alpine
-  #   container_name: nginx-proxy
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - /etc/nginx/vhost.d
-  #     - /usr/share/nginx/html
-  #     - ./certs:/etc/nginx/certs:ro
-  #     - /var/run/docker.sock:/tmp/docker.sock:ro
-  #     - ./vhost.d:/etc/nginx/vhost.d:ro
-  #     - ./staticfiles:/app/staticfiles:ro  # pour servir les fichiers statiques
-  #     - ./media:/app/media:ro              # pour servir les médias
-  #   networks:
-  #     - webproxy
-  #   restart: always
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy:alpine
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+      - ./certs:/etc/nginx/certs:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./vhost.d:/etc/nginx/vhost.d:ro
+      - ./staticfiles:/app/staticfiles:ro
+      - ./media:/app/media:ro
+    networks:
+      - webproxy
+    restart: always
 
-  # acme-companion:
-  #   image: nginxproxy/acme-companion
-  #   container_name: nginx-proxy-acme
-  #   depends_on:
-  #     - nginx-proxy
-  #   environment:
-  #     DEFAULT_EMAIL: contact@barakasn.com
-  #   volumes_from:
-  #     - nginx-proxy
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock:ro
-  #     - ./certs:/etc/nginx/certs
-  #   networks:
-  #     - webproxy
-  #   restart: always
+  acme-companion:
+    image: nginxproxy/acme-companion
+    container_name: nginx-proxy-acme
+    depends_on:
+      - nginx-proxy
+    environment:
+      DEFAULT_EMAIL: contact@barakasn.com
+    volumes_from:
+      - nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+    networks:
+      - webproxy
+    restart: always
 
   db:
     image: postgres:16

@@ -4,7 +4,7 @@ import time
 import requests
 
 # Étape 1 : Connexion
-login_url = "http://127.0.0.1:8080/api/v0/entities/login/"
+login_url = "http://127.0.0.1:8000/api/v0/entities/login/"
 login_payload = {"code": "CRPAY", "entity_id": "0aef8351-d226-4310-9e9f-c4c432a028de"}
 headers = {"Content-Type": "application/json"}
 login_response = requests.post(login_url, json=login_payload, headers=headers)
@@ -13,7 +13,7 @@ print("Login response:", login_response.json())
 
 if login_response.status_code == 200:
     token = login_response.json().get("access")
-    transaction_url = "http://127.0.0.1:8080/api/v0/transactions/create"
+    transaction_url = "http://127.0.0.1:8000/api/v0/transactions/create"
     transaction_headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {token}",

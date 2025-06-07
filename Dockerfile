@@ -17,7 +17,7 @@ RUN pip install --upgrade pip \
 COPY . /app/
 
 # Expose the port the app runs on
-EXPOSE 8080
+EXPOSE 8000
 
 # Run the Django development server
-CMD ["pipenv", "run", "python", "manage.py", "runserver", "0.0.0.0:8080"]
+CMD ["pipenv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]

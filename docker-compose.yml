@@ -55,16 +55,16 @@ services:
     command: >
       sh -c "python manage.py migrate &&
              python manage.py collectstatic --noinput &&
-             python manage.py runserver 0.0.0.0:8080"
+             python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
       - /home/baraka/ftp/files:/app/imports
       - ./staticfiles:/app/staticfiles
       - ./media:/app/media
     expose:
-      - "8080"
+      - "8000"
     ports:
-      - "8080:8080"
+      - "8000:8000"
     environment:
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${DB_PORT}/${POSTGRES_DB}
       - VIRTUAL_HOST=backend.crpay.com

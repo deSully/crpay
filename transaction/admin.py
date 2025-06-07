@@ -40,6 +40,10 @@ class TransactionAdmin(admin.ModelAdmin):
         "date_creation_fr",
     )
 
+    formfield_overrides = {
+        models.JSONField: {"widget": JSONEditorWidget(mode="view")},
+    }
+
     def ref_fr(self, obj):
         return obj.reference
 

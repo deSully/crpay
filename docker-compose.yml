@@ -66,9 +66,9 @@ services:
       - "8000:8000"
     environment:
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${DB_PORT}/${POSTGRES_DB}
-      - VIRTUAL_HOST=backend.crpay.com
-      - LETSENCRYPT_HOST=backend.crpay.com
-      - LETSENCRYPT_EMAIL=contact@crpay.com
+      - VIRTUAL_HOST=staging.crdigital.tech
+      - LETSENCRYPT_HOST=staging.crdigital.tech
+      - LETSENCRYPT_EMAIL=support@crdigital.tech
     env_file:
       - .env
     depends_on:

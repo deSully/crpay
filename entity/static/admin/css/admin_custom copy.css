@@ -1,0 +1,98 @@
+/* admin_custom.css */
+
+#view-site, /* Le lien "Voir le site" */
+.dark-mode-toggle { /* Le bouton de changement de thème */
+    display: none !important;
+}
+
+/* Body et fond général */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f7fa; /* gris très clair */
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  /* Header anthracite */
+  #header {
+    background-color: #2e2e2e !important; /* gris anthracite foncé */
+    border-bottom: 2px solid #ff6700 !important; /* ligne orange vif */
+  }
+  
+  /* Header titre */
+  #header h1 {
+    color: #fff !important;
+    font-weight: 700;
+    font-size: 1.8rem;
+  }
+  
+  /* Liens du header (top menu) */
+  #header a, #user-tools a {
+    color: #a8c0ff !important; /* bleu épuré */
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  #header a:hover, #user-tools a:hover {
+    color: #ff6700 !important; /* orange vif au hover */
+  }
+  
+  /* Navbar orange vif (menu principal sous header) */
+  #nav-global {
+    background-color: #ff6700 !important; /* orange vif */
+    border-bottom: none !important;
+  }
+  
+  /* Liens dans la navbar */
+  #nav-global a {
+    color: #fff !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background-color 0.3s ease;
+  }
+  
+  #nav-global a:hover, #nav-global .selected {
+    background-color: #e65c00 !important; /* orange un peu plus foncé au hover ou actif */
+    color: #fff !important;
+  }
+  
+  /* Sidebar (si présente) */
+  #nav-sidebar {
+    background-color: #1f1f1f !important; /* anthracite plus sombre */
+    color: #bbb;
+  }
+  
+  /* Contenu */
+  #content, #content-main {
+    max-width: 1800px;      /* plus large que 1200 */
+    margin: 0 auto;         /* centré horizontalement */
+    background-color: #fff !important;
+    min-height: 100vh;
+    padding: 1.5rem 3rem;   /* moins de padding vertical, plus horizontal */
+    color: #333;
+    box-sizing: border-box; 
+    width: 100%;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+
+
+  .dashboard-container {
+    max-width: 600px;
+    margin: 3rem auto;
+    text-align: center;
+  }
+
+  .dashboard-logo {
+    width: 250px;
+    height: auto; /* garde le ratio */
+    margin-bottom: 1.5rem;
+    opacity: 0.95;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}

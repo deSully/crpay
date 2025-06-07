@@ -1,0 +1,11 @@
+django
+djangorestframework
+drf-yasg
+psycopg2-binary
+django-filter
+djangorestframework-jwt
+djangorestframework-simplejwt
+httpx
+django-json-widget
+django-admin-rangefilter
+ruff

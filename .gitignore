@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+media/
+staticfiles/
+.env
+.envrc
+
+
+# Virtual Environments
+venv/
+.env/
+.Python
+
+# IDEs & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
+
+# Node.js (si tu utilises npm/yarn pour du frontend)
+node_modules/
+yarn.lock
+package-lock.json
+
+# Docker
+*.log
+docker-compose.override.yml
+
+# PostgreSQL
+*.dump
+
+# Token & Secrets
+config.json
+*.pem

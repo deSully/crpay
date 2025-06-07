@@ -1,0 +1,37 @@
+h1 {
+    font-size: 1.8rem;
+    color: #222;
+    margin-bottom: 2.5rem;
+  }
+
+  .dashboard-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem 2rem;
+    justify-items: center;
+  }
+
+  .dashboard-button {
+    display: inline-block;
+    padding: 1.5rem 2rem;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    min-width: 220px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+
+  .dashboard-button:hover {
+    background-color: #f5f5f5;
+    border-color: #bbb;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+  }
+  #view-site, .dark-mode-toggle {
+    display: none !important;
+  }

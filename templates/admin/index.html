@@ -1,0 +1,39 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-container">
+    <img src="{% static 'admin/img/logo-crpay.png' %}" alt="Logo Django" class="dashboard-logo"  height="200px" width="200px"/>
+
+  <!-- <h1>Bienvenue sur <strong>CRP-ADMIN</strong></h1> -->
+
+  <div class="dashboard-buttons-grid">
+    <a href="{% url 'admin:transaction_transaction_changelist' %}" class="dashboard-button">
+      Transactions
+    </a>
+    <a href="{% url 'admin:entity_entity_changelist' %}" class="dashboard-button">
+      Entités
+    </a>
+    <a href="{% url 'admin:transaction-stats' %}" class="dashboard-button">
+      Voir les statistiques
+    </a>
+    <a href="{% url 'admin:transaction_intouchlog_changelist' %}" class="dashboard-button">
+        Trace des appels API
+    </a>
+      
+  </div>
+</div>
+{% endblock %}
+
+{% block extrahead %}
+<style>
+
+
+
+</style>
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/admin_custom.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/home.css' %}">
+{% endblock %}
+
+{% block extrajs %}
+{% endblock %}

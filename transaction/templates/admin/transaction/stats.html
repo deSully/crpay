@@ -1,0 +1,311 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrahead %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+  <link rel="stylesheet" type="text/css" href="{% static 'admin/css/admin_custom.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'admin/css/stats.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1 class="page-title">{{ title }}</h1>
+
+<!-- Résumé -->
+<div class="summary-container">
+  <div class="summary-card summary-blue "
+  >
+    <strong>Montant total payé sur la période :</strong><br>
+    <span class="summary-value">{{ total_amount_paid }} {{ currency }}</span>
+  </div>
+  <div class="summary-card summary-green">
+    <strong>Montant moyen par transaction :</strong><br>
+    <span class="summary-value">{{ avg_amount_paid }} {{ currency }}</span>
+  </div>
+  <div class="summary-card summary-orange">
+    <strong>Montant total payé <u>aujourd’hui</u> :</strong><br>
+    <span class="summary-value">{{ total_today }} {{ currency }}</span>
+  </div>
+</div>
+
+<!-- Conteneur principal -->
+<div class="main-container">
+
+  <!-- Filtres -->
+  <form method="get" class="filter-form">
+    <fieldset class="filter-fieldset">
+      <legend class="filter-legend">Filtres</legend>
+
+      <div class="filter-inputs">
+        <div class="filter-group">
+          <label for="start_date">Date début</label>
+          <input type="date" id="start_date" name="start_date" value="{{ start_date }}" class="filter-input">
+        </div>
+        <div class="filter-group">
+          <label for="end_date">Date fin</label>
+          <input type="date" id="end_date" name="end_date" value="{{ end_date }}" class="filter-input">
+        </div>
+        <div class="filter-group filter-group-fullwidth">
+          <label for="purposeSelect">Libellés paiement</label>
+          <select id="purposeSelect" name="purposes" multiple class="filter-select">
+            {% for val in purposes %}
+              <option value="{{ val }}" {% if val in purposes_selected %}selected{% endif %}>{{ val }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="filter-group filter-group-fullwidth filter-button-wrapper">
+          <button type="submit" class="btn btn-success w-100">Filtrer</button>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+  <!-- Graphiques -->
+  <div class="charts-grid">
+
+    <!-- Card 1 -->
+    <div class="chart-card"
+      onmouseenter="this.style.boxShadow='0 12px 24px rgba(0,0,0,0.15)';"
+      onmouseleave="this.style.boxShadow='0 6px 12px rgba(0,0,0,0.08)';"
+    >
+      <h2 class="chart-title">Transactions par jour</h2>
+      <canvas id="txPerDayChart" class="chart-canvas"></canvas>
+    </div>
+  
+    <!-- Card 2 -->
+    <div class="chart-card"
+      onmouseenter="this.style.boxShadow='0 12px 24px rgba(0,0,0,0.15)';"
+      onmouseleave="this.style.boxShadow='0 6px 12px rgba(0,0,0,0.08)';"
+    >
+      <h2 class="chart-title">Transactions par libellé</h2>
+      <canvas id="txPerPurposeChart" class="chart-canvas"></canvas>
+    </div>
+  
+     <!-- Card 4 -->
+     <div class="chart-card"
+     onmouseenter="this.style.boxShadow='0 12px 24px rgba(0,0,0,0.15)';"
+     onmouseleave="this.style.boxShadow='0 6px 12px rgba(0,0,0,0.08)';"
+   >
+     <h2 class="chart-title">Évolution par jour</h2>
+     <canvas id="txLineChart" class="chart-canvas"></canvas>
+   </div>
+
+    <!-- Card 3 -->
+    <div class="chart-card"
+      onmouseenter="this.style.boxShadow='0 12px 24px rgba(0,0,0,0.15)';"
+      onmouseleave="this.style.boxShadow='0 6px 12px rgba(0,0,0,0.08)';"
+    >
+      <h2 class="chart-title">Répartition des statuts</h2>
+      <canvas id="statusPieChart" class="chart-canvas"></canvas>
+    </div>
+  
+   
+  
+    <!-- Card 5 -->
+    <div class="chart-card"
+      onmouseenter="this.style.boxShadow='0 12px 24px rgba(0,0,0,0.15)';"
+      onmouseleave="this.style.boxShadow='0 6px 12px rgba(0,0,0,0.08)';"
+    >
+      <h2 class="chart-title">Camembert par purpose</h2>
+      <canvas id="purposePieChart" class="chart-canvas"></canvas>
+    </div>
+  
+    <!-- Card 6 -->
+    <div class="chart-card"
+      onmouseenter="this.style.boxShadow='0 12px 24px rgba(0,0,0,0.15)';"
+      onmouseleave="this.style.boxShadow='0 6px 12px rgba(0,0,0,0.08)';"
+    >
+      <h2 class="chart-title">Radar par purpose</h2>
+      <canvas id="purposeRadarChart" class="chart-canvas"></canvas>
+    </div>
+  
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    new Choices('#purposeSelect', {
+      removeItemButton: true,
+      placeholderValue: 'Sélectionner des libellés',
+      searchEnabled: true,
+      itemSelectText: '',
+      shouldSort: false
+    });
+
+    const colors = {
+      blue: 'rgba(33, 150, 243, 0.8)',
+      blueBorder: 'rgba(33, 150, 243, 1)',
+      green: 'rgba(76, 175, 80, 0.8)',
+      greenBorder: 'rgba(76, 175, 80, 1)',
+      red: 'rgba(244, 67, 54, 0.8)',
+      redBorder: 'rgba(244, 67, 54, 1)',
+      yellow: 'rgba(255, 193, 7, 0.8)',
+      purple: 'rgba(156, 39, 176, 0.8)',
+      grey: 'rgba(158, 158, 158, 0.8)'
+    };
+
+    new Chart(document.getElementById('txPerDayChart'), {
+      type: 'bar',
+      data: {
+        labels: {{ labels_days|safe }},
+        datasets: [{
+          label: 'Transactions/jour',
+          data: {{ counts_days|safe }},
+          backgroundColor: colors.blue,
+          borderColor: colors.blueBorder,
+          borderWidth: 1,
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true, ticks: { precision: 0 } }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    new Chart(document.getElementById('txPerPurposeChart'), {
+      type: 'bar',
+      data: {
+        labels: {{ labels_purpose|safe }},
+        datasets: [{
+          label: 'Transactions/libellé',
+          data: {{ counts_purpose|safe }},
+          backgroundColor: colors.green,
+          borderColor: colors.greenBorder,
+          borderWidth: 1,
+          borderRadius: 4
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        scales: {
+          x: { beginAtZero: true, ticks: { precision: 0 } }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    new Chart(document.getElementById('statusPieChart'), {
+      type: 'pie',
+      data: {
+        labels: {{ labels_status|safe }},
+        datasets: [{
+          data: {{ counts_status|safe }},
+          backgroundColor: [colors.green, colors.red, colors.yellow],
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'top' } }
+      }
+    });
+
+    new Chart(document.getElementById('txLineChart'), {
+      type: 'line',
+      data: {
+        labels: {{ labels_days|safe }},
+        datasets: [{
+          label: 'Transactions/jour (ligne)',
+          data: {{ counts_days|safe }},
+          fill: false,
+          borderColor: colors.purple,
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'top' } },
+        scales: {
+          y: { beginAtZero: true, ticks: { precision: 0 } }
+        }
+      }
+    });
+
+    // Doughnut pour les montants par purpose
+    const radarLabels = ["Payment", "Refund", "Transfer"];
+    const purposeDataMap = {};
+    const purposeAmountMap = {};
+
+    {{ labels_purpose|safe }}.forEach((label, i) => {
+      purposeDataMap[label] = {{ counts_purpose|safe }}[i];
+      purposeAmountMap[label] = {{ amounts_per_purpose|safe }}[i];
+    });
+
+    const radarDataPurpose = radarLabels.map(label => purposeAmountMap[label] || 0);
+
+    new Chart(document.getElementById('purposePieChart'), {
+      type: 'pie',
+      data: {
+        labels: {{ labels_purpose|safe }},
+        datasets: [{
+          data: {{ counts_purpose|safe }},
+          backgroundColor: [
+            colors.blue,
+            colors.green,
+            colors.red,
+            colors.yellow,
+            colors.purple,
+            colors.grey
+          ],
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('purposeRadarChart'), {
+      type: 'doughnut',
+      data: {
+        labels: radarLabels,
+        datasets: [{
+          label: 'Montants encaissés par purpose',
+          data: radarDataPurpose,
+          backgroundColor: [
+            'rgba(0, 188, 212, 0.6)',
+            'rgba(0, 150, 136, 0.6)',
+            'rgba(255, 193, 7, 0.6)',
+            'rgba(244, 67, 54, 0.6)',
+            'rgba(156, 39, 176, 0.6)'
+          ],
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        cutout: '70%',
+        plugins: {
+          legend: {
+            position: 'right'
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                let label = context.label || '';
+                let value = context.raw || 0;
+                return `${label}: ${value.toLocaleString('fr-FR')} XOF`;
+              }
+            }
+          }
+        }
+      }
+    });
+  });
+</script>
+
+
+{% endblock %}

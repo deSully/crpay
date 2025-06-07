@@ -1,0 +1,11 @@
+{% extends "admin/change_list.html" %}
+{% load i18n %}
+
+{% block object-tools-items %}
+  {{ block.super }}
+  <li>
+    <a href="{% url 'admin:transaction-stats' %}" class="btn btn-sm btn-secondary">
+       {% trans "Voir les statistiques" %} 📊
+    </a>
+  </li>
+{% endblock %}

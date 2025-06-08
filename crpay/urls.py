@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
@@ -24,8 +24,11 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v0/entities/", include("entity.urls")),  # URLs pour les produits
     path("api/v0/payments/", include("transaction.urls")),  # URLs pour les produits
+
     # Documentation Swagger
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path(
+        
         "swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="swagger-ui"
     ),
 ]

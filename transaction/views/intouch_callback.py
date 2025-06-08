@@ -4,6 +4,7 @@ from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from drf_yasg.utils import swagger_auto_schema
 
 from transaction.models import InTouchLog, Transaction
 
@@ -11,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class InTouchCallbackView(APIView):
+    @swagger_auto_schema(auto_schema=None)
     def post(self, request, *args, **kwargs):
         data = request.data
         logger.info("InTouch callback received: %s", data)

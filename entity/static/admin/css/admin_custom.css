@@ -219,3 +219,65 @@ html, body {
   background-color: #5a4db2 !important;
   box-shadow: 0 5px 10px rgba(90, 77, 178, 0.6) !important;
 }
+
+/* Conteneur de la sidebar des filtres */
+.sidebar-module {
+  background-color: #f4f6fa; /* gris très clair */
+  border: 2px solid #7b66cc; /* violet doux */
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 0 10px rgba(123, 102, 204, 0.15);
+  font-family: 'Roboto', sans-serif;
+  color: #354776;
+}
+
+/* Titres des filtres (h3) */
+.sidebar-module h3 {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #5a4db2; /* violet foncé */
+  margin-bottom: 1rem;
+}
+
+/* Liste des filtres */
+.sidebar-module ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Chaque élément de filtre */
+.sidebar-module ul li {
+  margin-bottom: 0.6rem;
+}
+
+/* Liens des filtres */
+.sidebar-module ul li a {
+  color: #7b66cc; /* violet doux */
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+/* Hover et focus sur les liens */
+.sidebar-module ul li a:hover,
+.sidebar-module ul li a:focus {
+  color: #5a4db2; /* violet plus foncé */
+  text-decoration: underline;
+}
+
+/* État actif (filtre sélectionné) */
+.sidebar-module ul li.selected a {
+  font-weight: 700;
+  color: #5a4db2;
+  text-decoration: underline;
+}
+
+/* Cases à cocher (quand applicable) */
+.sidebar-module input[type="checkbox"],
+.sidebar-module input[type="radio"] {
+  accent-color: #7b66cc;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}

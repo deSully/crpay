@@ -3,40 +3,48 @@
 
 {% block content %}
 <div class="dashboard-container">
-    <img src="{% static 'admin/img/logo-crpay.png' %}" alt="Logo Django" class="dashboard-logo"  height="200px" width="200px"/>
+    <img src="{% static 'admin/img/logo-crpay.png' %}" alt="Logo Django" class="dashboard-logo" height="200px" width="200px"/>
 
-  <!-- <h1>Bienvenue sur <strong>CRP-ADMIN</strong></h1> -->
-
-  <div class="dashboard-buttons-grid">
-   
-    <a href="{% url 'admin:entity_entity_changelist' %}" class="dashboard-button">
-      Partenaires
-    </a>
-    <a href="{% url 'admin:entity_appuser_changelist' %}" class="dashboard-button">
-      Utilisateurs
-    </a>
-    <a href="{% url 'admin:transaction_transaction_changelist' %}" class="dashboard-button">
-      Transactions
-    </a>
-    <a href="{% url 'admin:transaction-stats' %}" class="dashboard-button">
-      Voir les statistiques
-    </a>
-    <a href="{% url 'admin:transaction_intouchlog_changelist' %}" class="dashboard-button">
-        Trace des appels API
-    </a>
-      
-  </div>
+    <div class="dashboard-buttons-grid">
+        <a href="{% url 'admin:entity_entity_changelist' %}" class="dashboard-button">
+            <i class="fas fa-building"></i> Partenaires
+        </a>
+        <a href="{% url 'admin:entity_appuser_changelist' %}" class="dashboard-button">
+            <i class="fas fa-users"></i> Utilisateurs
+        </a>
+        <a href="{% url 'admin:transaction_transaction_changelist' %}" class="dashboard-button">
+            <i class="fas fa-exchange-alt"></i> Transactions
+        </a>
+        <a href="{% url 'admin:transaction-stats' %}" class="dashboard-button">
+            <i class="fas fa-chart-line"></i> Voir les statistiques
+        </a>
+        <a href="{% url 'admin:transaction_intouchlog_changelist' %}" class="dashboard-button">
+            <i class="fas fa-terminal"></i> Trace des appels API
+        </a>
+    </div>
 </div>
 {% endblock %}
 
 {% block extrahead %}
-<style>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-
-
-</style>
+<!-- Tes fichiers CSS -->
 <link rel="stylesheet" type="text/css" href="{% static 'admin/css/admin_custom.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'admin/css/home.css' %}">
+
+<!-- Ajout simple pour marges et animation des icônes -->
+<style>
+  .dashboard-button i {
+    margin-right: 10px;
+    color: #666;
+    transition: color 0.3s ease;
+  }
+
+  .dashboard-button:hover i {
+    color: #007B5E; /* Un vert élégant */
+  }
+</style>
 {% endblock %}
 
 {% block extrajs %}

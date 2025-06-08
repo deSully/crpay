@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
@@ -6,27 +7,25 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from entity.models import Entity
-
 
 class EntityLoginView(APIView):
     permission_classes = [AllowAny]
 
     @swagger_auto_schema(
-        operation_summary="Connexion d'une entité via code et entity_id",
+        operation_summary="Connexion via username et mot de passe",
         operation_description="""
-Permet à une entité de se connecter en fournissant un code et un entity_id.
-Retourne un token JWT (access + refresh) si l'entité est valide, active, et autorisée.
+Permet à un utilisateur de se connecter en fournissant un username et un mot de passe.
+Retourne un token JWT (access + refresh) ainsi que les informations de l'entité liée.
 """,
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
-            required=["code", "entity_id"],
+            required=["username", "password"],
             properties={
-                "code": openapi.Schema(
-                    type=openapi.TYPE_STRING, description="Code unique de l'entité"
+                "username": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="Nom d'utilisateur"
                 ),
-                "entity_id": openapi.Schema(
-                    type=openapi.TYPE_STRING, description="Identifiant de l'entité"
+                "password": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="Mot de passe"
                 ),
             },
         ),
@@ -64,26 +63,40 @@ Retourne un token JWT (access + refresh) si l'entité est valide, active, et aut
                     },
                 ),
             ),
-            400: "Requête invalide ou compte inactif",
+            400: "Identifiants invalides ou compte inactif",
             403: "Entité non autorisée",
-            404: "Entité non trouvée",
+            404: "Entité liée non trouvée",
         },
     )
     def post(self, request, *args, **kwargs):
-        code = request.data.get("code")
-        entity_id = request.data.get("entity_id")
+        username = request.data.get("username")
+        password = request.data.get("password")
 
-        if not code or not entity_id:
+        if not username or not password:
             return Response(
-                {"error": "Le code et l'entity_id sont requis."},
+                {"error": "Le nom d'utilisateur et le mot de passe sont requis."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        try:
-            entity = Entity.objects.get(code=code, entity_id=entity_id)
-        except Entity.DoesNotExist:
+        user = authenticate(username=username, password=password)
+
+        if user is None:
             return Response(
-                {"error": "Entité non trouvée ou identifiants invalides."},
+                {"error": "Identifiants invalides."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not user.is_active:
+            return Response(
+                {"error": "Le compte utilisateur est inactif."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        entity = getattr(user, "entity", None)
+
+        if entity is None:
+            return Response(
+                {"error": "Aucune entité liée à cet utilisateur."},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -95,11 +108,11 @@ Retourne un token JWT (access + refresh) si l'entité est valide, active, et aut
 
         if not entity.is_active:
             return Response(
-                {"error": "Le compte est inactif."},
+                {"error": "L'entité liée est inactivée."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        refresh = RefreshToken.for_user(entity)
+        refresh = RefreshToken.for_user(user)
 
         return Response(
             {

@@ -1,4 +1,3 @@
-from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -15,9 +14,9 @@ class TransactionDetailView(RetrieveAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        if user.entity_type == "INTERNAL":
+        if user.entity.entity_type == "INTERNAL":
             return Transaction.objects.all()
-        return Transaction.objects.filter(entity=user)
+        return Transaction.objects.filter(entity=user.entity)
 
     @swagger_auto_schema(
         operation_summary="Détails d'une transaction",

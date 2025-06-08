@@ -8,11 +8,15 @@
   <!-- <h1>Bienvenue sur <strong>CRP-ADMIN</strong></h1> -->
 
   <div class="dashboard-buttons-grid">
+   
+    <a href="{% url 'admin:entity_entity_changelist' %}" class="dashboard-button">
+      Partenaires
+    </a>
+    <a href="{% url 'admin:entity_appuser_changelist' %}" class="dashboard-button">
+      Utilisateurs
+    </a>
     <a href="{% url 'admin:transaction_transaction_changelist' %}" class="dashboard-button">
       Transactions
-    </a>
-    <a href="{% url 'admin:entity_entity_changelist' %}" class="dashboard-button">
-      Entités
     </a>
     <a href="{% url 'admin:transaction-stats' %}" class="dashboard-button">
       Voir les statistiques

@@ -179,7 +179,7 @@ SIMPLE_JWT = {
 }
 
 
-AUTH_USER_MODEL = "entity.Entity"  # Modèle utilisateur personnalisé
+AUTH_USER_MODEL = "entity.AppUser"  # Modèle utilisateur personnalisé
 
 
 # Si tu es derrière un proxy comme nginx-proxy

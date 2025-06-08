@@ -27,9 +27,9 @@ class TransactionView(APIView):
 
     def get_queryset(self):
         user = self.request.user
-        if user.entity_type == "INTERNAL":
+        if user.entity.entity_type == "INTERNAL":
             return Transaction.objects.all()
-        return Transaction.objects.filter(entity=user)
+        return Transaction.objects.filter(entity=user.entity)
     
 
     @swagger_auto_schema(
@@ -106,7 +106,7 @@ class TransactionView(APIView):
             )
 
         reference = f"TX-{uuid.uuid4().hex[:10].upper()}"
-        entity = request.user
+        entity = request.user.entity
         full_details = {**details, "invoice_type": invoice_type}
 
         transaction = Transaction.objects.create(

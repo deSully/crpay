@@ -1,46 +1,32 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import Entity
+from .models import AppUser, Entity
 
 
 @admin.register(Entity)
-class EntityAdmin(UserAdmin):
-    model = Entity
-
+class EntityAdmin(admin.ModelAdmin):
     list_display = (
         "email",
-        "nom_utilisateur",
+        "nom",
         "type_entite",
-        "code_fr",
-        "nom_fr",
+        "code",
         "telephone",
         "pays",
         "date_creation",
         "actif",
         "id_entite",
-        "derniere_connexion",
     )
 
-    def nom_utilisateur(self, obj):
-        return obj.username
+    def nom(self, obj):
+        return obj.name
 
-    nom_utilisateur.short_description = "Nom d'utilisateur"
+    nom.short_description = "Nom"
 
     def type_entite(self, obj):
         return obj.entity_type
 
     type_entite.short_description = "Type d’entité"
-
-    def code_fr(self, obj):
-        return obj.code
-
-    code_fr.short_description = "Code"
-
-    def nom_fr(self, obj):
-        return obj.name
-
-    nom_fr.short_description = "Nom"
 
     def telephone(self, obj):
         return obj.phone
@@ -68,23 +54,44 @@ class EntityAdmin(UserAdmin):
 
     id_entite.short_description = "ID entité"
 
-    def derniere_connexion(self, obj):
-        if obj.last_login:
-            return obj.last_login.strftime("%d/%m/%Y à %H:%M")
-        return "-"
-
-    derniere_connexion.short_description = "Dernière connexion"
-
-    list_filter = ("entity_type", "is_active", "is_staff", "is_superuser", "country")
-    search_fields = ("email", "username", "name", "code", "phone")
+    list_filter = ("entity_type", "is_active", "country")
+    search_fields = ("email", "name", "code", "phone")
     ordering = ("-created_at",)
+
+    readonly_fields = ("created_at",)
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context["title"] = "Liste des entités (Marchands, Clients, Partenaires)"
+        return super().changelist_view(request, extra_context=extra_context)
+
+    def is_internal(self, request):
+        return (
+            hasattr(request.user, "entity")
+            and request.user.entity.entity_type == "INTERNAL"
+        )
+
+    def has_add_permission(self, request):
+        return self.is_internal(request)
+
+    def has_change_permission(self, request, obj=None):
+        return self.is_internal(request)
+
+    def has_delete_permission(self, request, obj=None):
+        return self.is_internal(request)
+
+
+@admin.register(AppUser)
+class AppUserAdmin(UserAdmin):
+    model = AppUser
+    list_display = ("email", "username", "entity", "is_active", "is_staff")
+    list_filter = ("is_active", "is_staff", "entity")
+    search_fields = ("email", "username", "entity__name")
+    ordering = ("-date_joined",)
 
     fieldsets = (
         ("Identifiants", {"fields": ("username", "email", "password")}),
-        (
-            "Informations personnelles",
-            {"fields": ("name", "code", "entity_type", "phone", "country", "address")},
-        ),
+        ("Données personnelles", {"fields": ("entity", "phone")}),
         (
             "Permissions",
             {
@@ -97,7 +104,7 @@ class EntityAdmin(UserAdmin):
                 )
             },
         ),
-        ("Dates importantes", {"fields": ("last_login", "created_at")}),
+        ("Dates importantes", {"fields": ("last_login", "date_joined")}),
     )
 
     add_fieldsets = (
@@ -106,36 +113,13 @@ class EntityAdmin(UserAdmin):
             {
                 "classes": ("wide",),
                 "fields": (
-                    "username",
                     "email",
+                    "username",
+                    "entity",
+                    "phone",
                     "password1",
                     "password2",
-                    "entity_type",
-                    "code",
-                    "name",
                 ),
             },
         ),
     )
-
-    readonly_fields = ("created_at", "last_login")
-
-    def changelist_view(self, request, extra_context=None):
-        extra_context = extra_context or {}
-        extra_context["title"] = "Liste des entités (Marchands, Clients, Partenaires)"
-        return super().changelist_view(request, extra_context=extra_context)
-
-    def is_internal(self, request):
-        return (
-            hasattr(request.user, "entity_type")
-            and request.user.entity_type == "INTERNAL"
-        )
-
-    def has_add_permission(self, request):
-        return self.is_internal(request)
-
-    def has_change_permission(self, request, obj=None):
-        return self.is_internal(request)
-
-    def has_delete_permission(self, request, obj=None):
-        return self.is_internal(request)

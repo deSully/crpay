@@ -77,7 +77,7 @@ class TransactionAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         user = request.user
 
-        if hasattr(user, "entity_type") and user.entity_type == "INTERNAL":
+        if hasattr(user, "entity") and user.entity.entity_type == "INTERNAL":
             return qs
         return qs.filter(entity=user)
 
@@ -351,7 +351,7 @@ class InTouchLogAdmin(admin.ModelAdmin):
     def is_interne(self, request):
         return (
             hasattr(request.user, "entity_type")
-            and request.user.entity_type == "INTERNAL"
+            and request.user.entity.entity_type == "INTERNAL"
         )
 
     def get_queryset(self, request):

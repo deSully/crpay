@@ -2,51 +2,51 @@ h1 {
   font-size: 1.8rem;
   color: #0a2f5c;
   margin-bottom: 2.5rem;
-  text-align: center; /* Pour bien centrer le titre */
+  text-align: center;
 }
 
 .dashboard-buttons-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2.5rem; /* Un peu plus d’espace entre les boutons */
-  justify-items: center; /* Centre les boutons dans chaque cellule du grid */
+  gap: 3rem; /* Plus d’espace entre les boutons */
+  justify-items: center; /* Centrer chaque bouton dans sa colonne */
   margin-top: 2rem;
-  padding: 0 1rem; /* Un padding horizontal pour ne pas coller aux bords */
+  padding: 0 1rem;
 }
 
 .dashboard-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 14px;
   padding: 2rem 2.5rem;
   background-color: #ffffff;
   color: #0a2f5c;
-  border: 1px solid #ccd5e0;
+  border: 2px solid #0a2f5c;
   border-radius: 14px;
   font-size: 1.3rem;
   text-decoration: none;
-  transition: all 0.25s ease-in-out;
+  transition: all 0.3s ease-in-out;
   width: 100%;
   max-width: 380px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 12px rgba(10, 47, 92, 0.15);
   cursor: pointer;
 }
 
 .dashboard-button:hover {
-  background-color: #f7941d; /* Passage à orange vif au hover */
-  border-color: #f7941d;
-  box-shadow: 0 6px 12px rgba(247, 148, 29, 0.5);
-  color: white; /* Texte blanc au hover */
-  transform: translateY(-3px);
+  background-color: #5b4b8a; /* Violet foncé raffiné */
+  border-color: #5b4b8a;
+  color: #e0d7f5; /* Texte clair, pastel */
+  box-shadow: 0 8px 20px rgba(91, 75, 138, 0.5);
+  transform: translateY(-4px);
 }
 
 .dashboard-button i {
-  font-size: 1.5rem;
-  color: #666;
+  font-size: 2.4rem; /* Icônes plus grandes */
+  color: #0a2f5c;
   transition: color 0.3s ease;
 }
 
 .dashboard-button:hover i {
-  color: white; /* icônes aussi en blanc au hover */
+  color: #e0d7f5;
 }

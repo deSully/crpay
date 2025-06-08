@@ -1,16 +1,17 @@
 h1 {
   font-size: 1.8rem;
-  color: #354776;
+  color: #0a2f5c;
   margin-bottom: 2.5rem;
-  font-weight: 700;
+  text-align: center; /* Pour bien centrer le titre */
 }
 
 .dashboard-buttons-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  justify-items: center;
+  gap: 2.5rem; /* Un peu plus d’espace entre les boutons */
+  justify-items: center; /* Centre les boutons dans chaque cellule du grid */
   margin-top: 2rem;
+  padding: 0 1rem; /* Un padding horizontal pour ne pas coller aux bords */
 }
 
 .dashboard-button {
@@ -20,31 +21,32 @@ h1 {
   gap: 12px;
   padding: 2rem 2.5rem;
   background-color: #ffffff;
-  color: #354776;
-  border: 2px solid #7b66cc;
+  color: #0a2f5c;
+  border: 1px solid #ccd5e0;
   border-radius: 14px;
   font-size: 1.3rem;
   text-decoration: none;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.25s ease-in-out;
   width: 100%;
   max-width: 380px;
-  box-shadow: 0 6px 12px rgba(123,102,204,0.15);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+  cursor: pointer;
 }
 
 .dashboard-button:hover {
-  background-color: #7b66cc;
-  border-color: #5a4db2;
-  color: #fff;
-  box-shadow: 0 10px 20px rgba(90,77,178,0.4);
-  transform: translateY(-4px);
+  background-color: #f7941d; /* Passage à orange vif au hover */
+  border-color: #f7941d;
+  box-shadow: 0 6px 12px rgba(247, 148, 29, 0.5);
+  color: white; /* Texte blanc au hover */
+  transform: translateY(-3px);
 }
 
 .dashboard-button i {
   font-size: 1.5rem;
-  color: #7b66cc;
+  color: #666;
   transition: color 0.3s ease;
 }
 
 .dashboard-button:hover i {
-  color: #fff;
+  color: white; /* icônes aussi en blanc au hover */
 }

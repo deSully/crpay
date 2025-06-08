@@ -1,7 +1,8 @@
 h1 {
   font-size: 1.8rem;
-  color: #0a2f5c;
+  color: #354776;
   margin-bottom: 2.5rem;
+  font-weight: 700;
 }
 
 .dashboard-buttons-grid {
@@ -19,30 +20,31 @@ h1 {
   gap: 12px;
   padding: 2rem 2.5rem;
   background-color: #ffffff;
-  color: #0a2f5c;
-  border: 1px solid #ccd5e0;
+  color: #354776;
+  border: 2px solid #7b66cc;
   border-radius: 14px;
   font-size: 1.3rem;
   text-decoration: none;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.3s ease-in-out;
   width: 100%;
   max-width: 380px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 6px 12px rgba(123,102,204,0.15);
 }
 
 .dashboard-button:hover {
-  background-color: #f8f9fb;
-  border-color: #f7941d;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-  transform: translateY(-3px);
+  background-color: #7b66cc;
+  border-color: #5a4db2;
+  color: #fff;
+  box-shadow: 0 10px 20px rgba(90,77,178,0.4);
+  transform: translateY(-4px);
 }
 
 .dashboard-button i {
   font-size: 1.5rem;
-  color: #666;
+  color: #7b66cc;
   transition: color 0.3s ease;
 }
 
 .dashboard-button:hover i {
-  color: #f7941d;
+  color: #fff;
 }

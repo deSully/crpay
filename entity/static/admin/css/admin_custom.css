@@ -1,94 +1,89 @@
-/* admin_custom.css */
+/* admin_custom.css CR-PAY */
 
-#view-site, /* Le lien "Voir le site" */
-.dark-mode-toggle { /* Le bouton de changement de thème */
+#view-site,
+.dark-mode-toggle {
     display: none !important;
 }
 
-/* Body et fond général */
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color: #f5f7fa; /* gris très clair */
+    background-color: #f4f6fa;
     font-family: 'Roboto', sans-serif;
-  }
-  
-  /* Header anthracite */
-  #header {
-    background-color: #2e2e2e !important; /* gris anthracite foncé */
-    border-bottom: 2px solid #ff6700 !important; /* ligne orange vif */
-  }
-  
-  /* Header titre */
-  #header h1 {
+}
+
+/* Header */
+#header {
+    background-color: #0a2f5c !important;
+    border-bottom: 2px solid #f7941d !important;
+}
+
+#header h1 {
     color: #fff !important;
     font-weight: 700;
     font-size: 1.8rem;
-  }
-  
-  /* Liens du header (top menu) */
-  #header a, #user-tools a {
-    color: #a8c0ff !important; /* bleu épuré */
+}
+
+#header a, #user-tools a {
+    color: #d0e2ff !important;
     font-weight: 500;
     transition: color 0.3s ease;
-  }
-  
-  #header a:hover, #user-tools a:hover {
-    color: #ff6700 !important; /* orange vif au hover */
-  }
-  
-  /* Navbar orange vif (menu principal sous header) */
-  #nav-global {
-    background-color: #ff6700 !important; /* orange vif */
+}
+
+#header a:hover, #user-tools a:hover {
+    color: #f7941d !important;
+}
+
+/* Navbar */
+#nav-global {
+    background-color: #f7941d !important;
     border-bottom: none !important;
-  }
-  
-  /* Liens dans la navbar */
-  #nav-global a {
+}
+
+#nav-global a {
     color: #fff !important;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     transition: background-color 0.3s ease;
-  }
-  
-  #nav-global a:hover, #nav-global .selected {
-    background-color: #e65c00 !important; /* orange un peu plus foncé au hover ou actif */
+}
+
+#nav-global a:hover, #nav-global .selected {
+    background-color: #dd851b !important;
     color: #fff !important;
-  }
-  
-  /* Sidebar (si présente) */
-  #nav-sidebar {
-    background-color: #1f1f1f !important; /* anthracite plus sombre */
+}
+
+/* Sidebar */
+#nav-sidebar {
+    background-color: #081d3c !important;
     color: #bbb;
-  }
-  
-  /* Contenu */
-  #content, #content-main {
-    max-width: 1800px;      /* plus large que 1200 */
-    margin: 0 auto;         /* centré horizontalement */
+}
+
+/* Contenu */
+#content, #content-main {
+    max-width: 1800px;
+    margin: 0 auto;
     background-color: #fff !important;
     min-height: 100vh;
-    padding: 1.5rem 3rem;   /* moins de padding vertical, plus horizontal */
+    padding: 1.5rem 3rem;
     color: #333;
-    box-sizing: border-box; 
+    box-sizing: border-box;
     width: 100%;
     margin-left: auto !important;
     margin-right: auto !important;
 }
 
-
-
-  .dashboard-container {
+/* Dashboard */
+.dashboard-container {
     max-width: 600px;
     margin: 3rem auto;
     text-align: center;
-  }
+}
 
-  .dashboard-logo {
+.dashboard-logo {
     width: 250px;
-    height: auto; /* garde le ratio */
+    height: auto;
     margin-bottom: 1.5rem;
     opacity: 0.95;
     display: block;
@@ -97,13 +92,14 @@ html, body {
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 
+/* Site name */
 #site-name a {
-  color: #007B5E; /* Vert doux */
-  font-weight: bold;
-  font-size: 1.2rem;
-  text-decoration: none;
+    color: #0a2f5c;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-decoration: none;
 }
 
 #site-name a:hover {
-  color: #004c3f;
+    color: #f7941d;
 }

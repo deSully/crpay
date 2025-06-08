@@ -96,3 +96,14 @@ html, body {
     margin-right: auto;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
+
+#site-name a {
+  color: #007B5E; /* Vert doux */
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+
+#site-name a:hover {
+  color: #004c3f;
+}

@@ -1,11 +1,9 @@
 from django.urls import path
 
-from .views.create_transaction import CreateTransactionView
 from .views.intouch_callback import InTouchCallbackView
-from .views.list_transactions import TransactionListView
+from .views.transaction import TransactionView
 
 urlpatterns = [
-    path("create", CreateTransactionView.as_view(), name="create_transaction"),
-    path("list", TransactionListView.as_view(), name="list_transactions"),
+    path("", TransactionView.as_view(), name="create_transaction"),
     path("callback", InTouchCallbackView.as_view(), name="intouch-callback"),
 ]

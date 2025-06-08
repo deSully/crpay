@@ -124,3 +124,98 @@ html, body {
     background-color: #354776 !important;
     color: white !important;
 }
+
+/* --- Sidebar nav --- */
+#admin-sidebar {
+  background-color: #7b66cc !important; /* violet doux */
+  color: #fff !important;
+  border-right: none !important;
+}
+
+#admin-sidebar a {
+  color: #e0dff7 !important; /* violet très clair */
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+#admin-sidebar a:hover, 
+#admin-sidebar a:focus, 
+#admin-sidebar .active {
+  color: #fff !important;
+  background-color: #5a4db2 !important; /* violet plus foncé */
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+/* Sidebar nav icons */
+#admin-sidebar .fa, 
+#admin-sidebar .icon {
+  color: #d1cfff !important;
+}
+
+/* --- Filtre sidebar --- */
+.filter-sidebar {
+  background-color: #f9f9fc;
+  border: 2px solid #7b66cc;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 0 10px rgba(123, 102, 204, 0.1);
+  font-family: 'Roboto', sans-serif;
+  color: #354776;
+}
+
+.filter-sidebar h3 {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  color: #5a4db2;
+}
+
+.filter-sidebar label {
+  display: block;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: #354776;
+}
+
+.filter-sidebar input[type="checkbox"],
+.filter-sidebar input[type="radio"] {
+  margin-right: 0.6rem;
+  accent-color: #7b66cc;
+  cursor: pointer;
+}
+
+.filter-sidebar input[type="checkbox"]:checked + label,
+.filter-sidebar input[type="radio"]:checked + label {
+  font-weight: 700;
+  color: #5a4db2;
+}
+
+.filter-sidebar a {
+  color: #7b66cc;
+  text-decoration: none;
+}
+
+.filter-sidebar a:hover {
+  text-decoration: underline;
+  color: #5a4db2;
+}
+
+/* Boutons dans admin */
+.button {
+  background-color: #7b66cc !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  border: none !important;
+  padding: 0.5rem 1rem !important;
+  font-weight: 600 !important;
+  box-shadow: 0 3px 6px rgba(123, 102, 204, 0.4) !important;
+  transition: background-color 0.3s ease !important;
+}
+
+.button:hover {
+  background-color: #5a4db2 !important;
+  box-shadow: 0 5px 10px rgba(90, 77, 178, 0.6) !important;
+}

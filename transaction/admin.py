@@ -22,7 +22,7 @@ from .models import InTouchLog
 
 admin.site.site_header = "CRPAY-ADMIN"
 admin.site.site_title = "CRPAY-ADMIN"
-admin.site.index_title = "Plateforme d'administration CRPAY"
+admin.site.index_title = ""
 
 
 @admin.register(Transaction)

@@ -1,3 +1,5 @@
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -10,6 +12,63 @@ from entity.models import Entity
 class EntityLoginView(APIView):
     permission_classes = [AllowAny]
 
+    @swagger_auto_schema(
+        operation_summary="Connexion d'une entité via code et entity_id",
+        operation_description="""
+Permet à une entité de se connecter en fournissant un code et un entity_id.
+Retourne un token JWT (access + refresh) si l'entité est valide, active, et autorisée.
+""",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=["code", "entity_id"],
+            properties={
+                "code": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="Code unique de l'entité"
+                ),
+                "entity_id": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="Identifiant de l'entité"
+                ),
+            },
+        ),
+        responses={
+            200: openapi.Response(
+                description="Connexion réussie",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        "refresh": openapi.Schema(type=openapi.TYPE_STRING),
+                        "access": openapi.Schema(type=openapi.TYPE_STRING),
+                        "entity": openapi.Schema(
+                            type=openapi.TYPE_OBJECT,
+                            properties={
+                                "code": openapi.Schema(type=openapi.TYPE_STRING),
+                                "name": openapi.Schema(type=openapi.TYPE_STRING),
+                                "email": openapi.Schema(type=openapi.TYPE_STRING),
+                                "phone": openapi.Schema(type=openapi.TYPE_STRING),
+                                "entity_type": openapi.Schema(type=openapi.TYPE_STRING),
+                                "is_active": openapi.Schema(type=openapi.TYPE_BOOLEAN),
+                                "date_joined": openapi.Schema(
+                                    type=openapi.TYPE_STRING, format="date-time"
+                                ),
+                                "last_login": openapi.Schema(
+                                    type=openapi.TYPE_STRING,
+                                    format="date-time",
+                                    nullable=True,
+                                ),
+                                "created_at": openapi.Schema(
+                                    type=openapi.TYPE_STRING, format="date-time"
+                                ),
+                                "username": openapi.Schema(type=openapi.TYPE_STRING),
+                            },
+                        ),
+                    },
+                ),
+            ),
+            400: "Requête invalide ou compte inactif",
+            403: "Entité non autorisée",
+            404: "Entité non trouvée",
+        },
+    )
     def post(self, request, *args, **kwargs):
         code = request.data.get("code")
         entity_id = request.data.get("entity_id")

@@ -1,5 +1,3 @@
-/* home.css CR-PAY */
-
 h1 {
   font-size: 1.8rem;
   color: #0a2f5c;
@@ -47,9 +45,4 @@ h1 {
 
 .dashboard-button:hover i {
   color: #f7941d;
-}
-
-#view-site,
-.dark-mode-toggle {
-  display: none !important;
 }

@@ -1,5 +1,3 @@
-/* admin_custom.css CR-PAY */
-
 #view-site,
 .dark-mode-toggle {
     display: none !important;
@@ -38,7 +36,6 @@ html, body {
 /* Navbar */
 #nav-global {
     background-color: #f7941d !important;
-    border-bottom: none !important;
 }
 
 #nav-global a {
@@ -60,7 +57,27 @@ html, body {
     color: #bbb;
 }
 
-/* Contenu */
+#nav-sidebar .model a {
+    color: #ddd !important;
+    transition: color 0.3s ease;
+}
+
+#nav-sidebar .model a:hover {
+    color: #f7941d !important;
+}
+
+#nav-sidebar .current-app .section,
+#nav-sidebar .model.current-model {
+    background-color: #f7941d !important;
+    color: #fff !important;
+}
+
+#nav-sidebar .model.current-model a {
+    color: #fff !important;
+    font-weight: 600;
+}
+
+/* Main content */
 #content, #content-main {
     max-width: 1800px;
     margin: 0 auto;
@@ -69,9 +86,14 @@ html, body {
     padding: 1.5rem 3rem;
     color: #333;
     box-sizing: border-box;
-    width: 100%;
-    margin-left: auto !important;
-    margin-right: auto !important;
+}
+
+/* Headings */
+#content h1, #content-main h1 {
+    color: #0a2f5c !important;
+    border-bottom: 2px solid #f7941d !important;
+    padding-bottom: 0.3rem;
+    margin-bottom: 1.2rem;
 }
 
 /* Dashboard */
@@ -85,10 +107,10 @@ html, body {
     width: 250px;
     height: auto;
     margin-bottom: 1.5rem;
-    opacity: 0.95;
     display: block;
     margin-left: auto;
     margin-right: auto;
+    opacity: 0.95;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 
@@ -104,62 +126,28 @@ html, body {
     color: #f7941d;
 }
 
-/* --- Adaptation complète Django Admin aux couleurs CR-PAY --- */
-
-/* Boutons principaux */
+/* Buttons */
 .button, .submit-row input, .addlink, .deletelink, .changelink, input[type="submit"] {
-  background-color: #f7941d !important;
-  border: none !important;
-  color: #fff !important;
-  font-weight: 600;
-  border-radius: 6px;
-  padding: 0.4rem 1rem;
-  transition: background-color 0.2s ease-in-out;
+    background-color: #f7941d !important;
+    border: none !important;
+    color: #fff !important;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 0.4rem 1rem;
+    transition: background-color 0.2s ease-in-out;
 }
 
 .button:hover, .submit-row input:hover, .addlink:hover, .deletelink:hover, input[type="submit"]:hover {
-  background-color: #dd851b !important;
-  color: #fff !important;
+    background-color: #dd851b !important;
 }
 
-/* Boutons secondaires (cancel, etc.) */
 .button.cancel {
-  background-color: transparent !important;
-  color: #0a2f5c !important;
-  border: 1px solid #0a2f5c !important;
+    background-color: transparent !important;
+    color: #0a2f5c !important;
+    border: 1px solid #0a2f5c !important;
 }
 
 .button.cancel:hover {
-  background-color: #0a2f5c !important;
-  color: white !important;
-}
-
-/* Menu latéral sélectionné */
-#nav-sidebar .current-app .section, #nav-sidebar .model.current-model {
-  background-color: #f7941d !important;
-  color: #fff !important;
-}
-
-/* Lien actif dans la sidebar */
-#nav-sidebar .model.current-model a {
-  color: #fff !important;
-  font-weight: 600;
-}
-
-/* Lien normal dans la sidebar */
-#nav-sidebar .model a {
-  color: #ddd !important;
-  transition: color 0.3s ease;
-}
-
-#nav-sidebar .model a:hover {
-  color: #f7941d !important;
-}
-
-/* Titres de sections */
-#content h1, #content-main h1 {
-  color: #0a2f5c !important;
-  border-bottom: 2px solid #f7941d !important;
-  padding-bottom: 0.3rem;
-  margin-bottom: 1.2rem;
+    background-color: #0a2f5c !important;
+    color: white !important;
 }

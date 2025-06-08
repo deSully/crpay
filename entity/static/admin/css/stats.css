@@ -2,43 +2,48 @@
   font-family: 'Roboto', sans-serif;
   font-weight: 600;
   font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #3a3f58; /* gris foncé doux */
+  margin-bottom: 1.5rem;
+  color: #354776; /* bleu violet profond, cohérent avec header */
+  text-align: center;
 }
 
 .summary-container {
   display: flex;
-  gap: 2em;
+  gap: 2.5rem;
   flex-wrap: wrap;
-  margin-bottom: 2em;
-  font-size: 1.2em;
+  margin-bottom: 2.5rem;
+  font-size: 1.2rem;
 }
 
 .summary-card {
   flex: 1;
-  min-width: 200px;
-  padding: 1em;
-  border-radius: 8px;
-  background-color: #d8e1f2; /* bleu pastel doux */
+  min-width: 220px;
+  padding: 1.2rem;
+  border-radius: 14px;
+  background-color: #e6e4f0; /* violet pastel très doux */
   color: #354776; /* bleu violet profond */
-  box-shadow: 0 2px 6px rgba(53,71,118,0.15);
-  transition: box-shadow 0.3s ease;
+  box-shadow: 0 3px 8px rgba(123, 102, 204, 0.15);
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  cursor: default;
 }
+
 .summary-card:hover {
-  box-shadow: 0 4px 12px rgba(123,102,204,0.3); /* violet doux */
+  box-shadow: 0 6px 16px rgba(91, 75, 138, 0.3);
+  background-color: #f0eef8;
 }
 
 .summary-value {
-  font-size: 1.5em;
+  font-size: 1.6rem;
   font-weight: 700;
-  color: #354776;
+  color: #5a4db2; /* violet plus foncé */
 }
 
 .main-container {
   display: flex;
-  gap: 2rem;
+  gap: 2.5rem;
   align-items: flex-start;
   flex-wrap: nowrap;
+  padding: 0 1rem;
 }
 
 .filter-form {
@@ -46,69 +51,76 @@
 }
 
 .filter-fieldset {
-  padding: 1.5rem 2rem;
-  border: 1px solid #7b66cc; /* violet subtil */
-  border-radius: 8px;
-  background-color: #f4f6fa; /* gris très clair */
-  box-shadow: 0 0 8px rgba(123,102,204,0.1);
+  padding: 1.8rem 2.2rem;
+  border: 2px solid #7b66cc; /* violet vif */
+  border-radius: 12px;
+  background-color: #f9f9fc;
+  box-shadow: 0 0 10px rgba(123, 102, 204, 0.12);
 }
 
 .filter-legend {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 600;
   color: #354776;
+  margin-bottom: 1rem;
 }
 
 .filter-input, .filter-select {
   width: 100%;
-  padding: 0.4rem 0.5rem;
-  font-size: 1rem;
-  border: 1px solid #aab5d1;
-  border-radius: 6px;
-  background-color: #d8e1f2;
+  padding: 0.6rem 0.8rem;
+  font-size: 1.1rem;
+  border: 1.5px solid #aab5d1;
+  border-radius: 10px;
+  background-color: #e6e4f0;
+  color: #354776;
   transition: border-color 0.3s ease, background-color 0.3s ease;
+  box-sizing: border-box;
 }
 
 .filter-input:focus, .filter-select:focus {
-  border-color: #7b66cc;
+  border-color: #5a4db2;
   outline: none;
   background-color: #fff;
-  box-shadow: 0 0 6px 2px rgba(123,102,204,0.3);
+  box-shadow: 0 0 8px 3px rgba(91, 75, 138, 0.3);
 }
 
 .filter-button-wrapper {
-  margin-top: 0.5rem;
+  margin-top: 1rem;
+  text-align: center;
 }
 
 .btn-success {
   background-color: #7b66cc; /* violet doux */
   border: none;
-  color: white;
-  font-weight: 600;
-  padding: 0.5rem 1.2rem;
+  color: #fff;
+  font-weight: 700;
+  padding: 0.7rem 1.5rem;
   cursor: pointer;
-  border-radius: 8px;
-  box-shadow: 0 3px 6px rgba(123,102,204,0.4);
+  border-radius: 14px;
+  box-shadow: 0 4px 8px rgba(123, 102, 204, 0.4);
+  font-size: 1.15rem;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  max-width: 200px;
 }
 
 .btn-success:hover {
   background-color: #5a4db2; /* violet plus foncé */
-  box-shadow: 0 5px 10px rgba(90,77,178,0.6);
+  box-shadow: 0 6px 14px rgba(90, 77, 178, 0.7);
 }
 
 .charts-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.5rem;
   flex: 1 1 auto;
 }
 
 .chart-card {
   background: #fff;
-  border-radius: 10px;
-  padding: 1.5rem 1rem;
-  box-shadow: 0 6px 12px rgba(53,71,118,0.1);
+  border-radius: 14px;
+  padding: 1.8rem 1.2rem;
+  box-shadow: 0 6px 16px rgba(53, 71, 118, 0.1);
   transition: box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -116,17 +128,18 @@
 }
 
 .chart-card:hover {
-  box-shadow: 0 8px 16px rgba(123,102,204,0.25);
+  box-shadow: 0 8px 22px rgba(123, 102, 204, 0.25);
 }
 
 .chart-title {
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
   font-weight: 600;
-  color: #354776;
+  color: #5a4db2;
   text-align: center;
+  font-size: 1.25rem;
 }
 
 .chart-canvas {
   max-width: 100%;
-  height: 200px;
+  height: 220px;
 }

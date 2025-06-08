@@ -10,7 +10,7 @@ def send_entity_init_email(user, password):
         message = f"""
 ✅ Compte super utilisateur créé :
 
-👤 Nom complet : {user.name}
+👤 Nom complet : {user.first_name} {user.last_name}
 📧 Email       : {user.email}
 📱 Téléphone   : {user.phone}
 🏷️  Code       : {user.code}

@@ -7,7 +7,6 @@ from .models import AppUser, Entity
 @admin.register(Entity)
 class EntityAdmin(admin.ModelAdmin):
     list_display = (
-        "email",
         "nom",
         "type_entite",
         "code",

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from .forms import AppUserCreationForm, AppUserChangeForm
 
 from .models import AppUser, Entity
 
@@ -81,8 +82,12 @@ class EntityAdmin(admin.ModelAdmin):
 
 
 @admin.register(AppUser)
+@admin.register(AppUser)
 class AppUserAdmin(UserAdmin):
+    add_form = AppUserCreationForm
+    form = AppUserChangeForm
     model = AppUser
+
     list_display = ("email", "username", "entity", "is_active", "is_staff")
     list_filter = ("is_active", "is_staff", "entity")
     search_fields = ("email", "username", "entity__name")

@@ -94,7 +94,7 @@ class AppUserAdmin(UserAdmin):
 
     fieldsets = (
         ("Identifiants", {"fields": ("username", "email", "password")}),
-        ("Données personnelles", {"fields": ("entity")}),
+        ("Données personnelles", {"fields": ("entity",)}),
         (
             "Permissions",
             {

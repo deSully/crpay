@@ -82,7 +82,6 @@ class EntityAdmin(admin.ModelAdmin):
 
 
 @admin.register(AppUser)
-@admin.register(AppUser)
 class AppUserAdmin(UserAdmin):
     add_form = AppUserCreationForm
     form = AppUserChangeForm
@@ -95,7 +94,7 @@ class AppUserAdmin(UserAdmin):
 
     fieldsets = (
         ("Identifiants", {"fields": ("username", "email", "password")}),
-        ("Données personnelles", {"fields": ("entity", "phone")}),
+        ("Données personnelles", {"fields": ("entity")}),
         (
             "Permissions",
             {
@@ -120,7 +119,6 @@ class AppUserAdmin(UserAdmin):
                     "email",
                     "username",
                     "entity",
-                    "phone",
                     "password1",
                     "password2",
                 ),

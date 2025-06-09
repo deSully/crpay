@@ -281,3 +281,74 @@ html, body {
   cursor: pointer;
   margin-right: 0.5rem;
 }
+
+/* Supprimer image background des titres de filtres */
+fieldset.module {
+  background: #f4f6fa !important; /* gris très clair */
+  border: 2px solid #7b66cc !important; /* violet doux */
+  border-radius: 8px !important;
+  box-shadow: 0 0 8px rgba(123,102,204,0.15) !important;
+  padding: 1rem !important;
+  font-family: 'Roboto', sans-serif;
+  color: #354776 !important;
+}
+
+/* Retirer background-image (flèches) dans legend */
+fieldset.module > legend {
+  background-image: none !important;
+  color: #5a4db2 !important; /* violet foncé */
+  font-weight: 700 !important;
+  font-size: 1.2rem !important;
+  padding: 0 0.5rem !important;
+  cursor: default !important;
+}
+
+/* Liste des filtres */
+fieldset.module ul {
+  list-style: none !important;
+  padding-left: 0 !important;
+  margin-top: 0.5rem !important;
+}
+
+/* Chaque élément de filtre */
+fieldset.module ul li {
+  margin-bottom: 0.6rem !important;
+}
+
+/* Liens cliquables dans les filtres */
+fieldset.module ul li a {
+  color: #7b66cc !important; /* violet doux */
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  transition: color 0.3s ease !important;
+}
+
+/* Hover sur les liens */
+fieldset.module ul li a:hover,
+fieldset.module ul li a:focus {
+  color: #5a4db2 !important; /* violet foncé */
+  text-decoration: underline !important;
+}
+
+/* Lien actif / sélectionné */
+fieldset.module ul li.selected a,
+fieldset.module ul li.selected a:visited {
+  color: #5a4db2 !important;
+  font-weight: 700 !important;
+  text-decoration: underline !important;
+  cursor: default !important;
+}
+
+/* Cases à cocher et radios */
+fieldset.module input[type="checkbox"],
+fieldset.module input[type="radio"] {
+  accent-color: #7b66cc !important;
+  cursor: pointer !important;
+  margin-right: 0.5rem !important;
+  vertical-align: middle !important;
+}
+
+/* Supprimer image background des cases cochées */
+fieldset.module input[type="checkbox"]:checked {
+  background-image: none !important;
+}

@@ -1,411 +1,122 @@
-#view-site,
-.dark-mode-toggle {
-    display: none !important;
-}
-
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f6fa;
-    font-family: 'Roboto', sans-serif;
-    color: #3a3f58;
-}
-
-/* Header */
-#header {
-    background-color: #354776 !important; /* bleu-violet */
-    border-bottom: 3px solid #7b66cc !important; /* violet */
-}
-
-#header h1 {
-    color: #fff !important;
-    font-weight: 700;
-    font-size: 1.8rem;
-}
-
-#header a, #user-tools a {
-    color: #c3ccee !important;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-#header a:hover, #user-tools a:hover {
-    color: #7b66cc !important;
-}
-
-/* Navbar */
-#nav-global {
-    background-color: #7b66cc !important;
-}
-
-#nav-global a {
-    color: #fff !important;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    transition: background-color 0.3s ease;
-}
-
-#nav-global a:hover, #nav-global .selected {
-    background-color: #5a4db2 !important;
-    color: #fff !important;
-}
-
-/* Sidebar */
-#nav-sidebar {
-    background-color: #2c3b66 !important; /* bleu plus sombre */
-    color: #bbb;
-}
-
-#nav-sidebar .model a {
-    color: #ddd !important;
-    transition: color 0.3s ease;
-}
-
-#nav-sidebar .model a:hover {
-    color: #7b66cc !important;
-}
-
-#nav-sidebar .current-app .section,
-#nav-sidebar .model.current-model {
-    background-color: #7b66cc !important;
-    color: #fff !important;
-}
-
-#nav-sidebar .model.current-model a {
-    color: #fff !important;
-    font-weight: 600;
-}
-
-/* Main content */
-#content, #content-main {
-    max-width: 1800px;
-    margin: 0 auto;
-    background-color: #fff !important;
-    min-height: 100vh;
-    padding: 1.5rem 3rem;
-    color: #3a3f58;
-    box-sizing: border-box;
-}
-
-/* Headings */
-#content h1, #content-main h1 {
-    color: #354776 !important;
-    border-bottom: 2px solid #7b66cc !important;
-    padding-bottom: 0.3rem;
-    margin-bottom: 1.2rem;
-}
-
-/* Buttons */
-.button, .submit-row input, .addlink, .deletelink, .changelink, input[type="submit"] {
-    background-color: #7b66cc !important;
-    border: none !important;
-    color: #fff !important;
-    font-weight: 600;
-    border-radius: 6px;
-    padding: 0.5rem 1rem;
-    transition: background-color 0.3s ease-in-out;
-    box-shadow: 0 3px 6px rgba(123,102,204,0.4);
-}
-
-.button:hover, .submit-row input:hover, .addlink:hover, .deletelink:hover, input[type="submit"]:hover {
-    background-color: #5a4db2 !important;
-    box-shadow: 0 5px 10px rgba(90,77,178,0.6);
-}
-
-.button.cancel {
-    background-color: transparent !important;
-    color: #354776 !important;
-    border: 1px solid #354776 !important;
-}
-
-.button.cancel:hover {
-    background-color: #354776 !important;
-    color: white !important;
-}
-
-/* --- Sidebar nav --- */
-#admin-sidebar {
-  background-color: #7b66cc !important; /* violet doux */
-  color: #fff !important;
-  border-right: none !important;
-}
-
-#admin-sidebar a {
-  color: #e0dff7 !important; /* violet très clair */
-  font-weight: 600;
-  transition: color 0.3s ease;
-}
-
-#admin-sidebar a:hover, 
-#admin-sidebar a:focus, 
-#admin-sidebar .active {
-  color: #fff !important;
-  background-color: #5a4db2 !important; /* violet plus foncé */
-  text-decoration: none;
-  border-radius: 6px;
-}
-
-/* Sidebar nav icons */
-#admin-sidebar .fa, 
-#admin-sidebar .icon {
-  color: #d1cfff !important;
-}
-
-/* --- Filtre sidebar --- */
-.filter-sidebar {
-  background-color: #f9f9fc;
-  border: 2px solid #7b66cc;
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 0 10px rgba(123, 102, 204, 0.1);
+/* TYPOGRAPHIE GÉNÉRALE */
+body, .module h2, .submit-row input {
   font-family: 'Roboto', sans-serif;
-  color: #354776;
 }
 
-.filter-sidebar h3 {
-  font-weight: 700;
-  font-size: 1.1rem;
-  margin-bottom: 0.8rem;
-  color: #5a4db2;
-}
-
-.filter-sidebar label {
-  display: block;
-  margin-bottom: 0.5rem;
-  cursor: pointer;
-  font-weight: 600;
-  color: #354776;
-}
-
-.filter-sidebar input[type="checkbox"],
-.filter-sidebar input[type="radio"] {
-  margin-right: 0.6rem;
-  accent-color: #7b66cc;
-  cursor: pointer;
-}
-
-.filter-sidebar input[type="checkbox"]:checked + label,
-.filter-sidebar input[type="radio"]:checked + label {
-  font-weight: 700;
-  color: #5a4db2;
-}
-
-.filter-sidebar a {
-  color: #7b66cc;
+/* LIENS */
+a, a:visited {
+  color: #6366f1;
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 
-.filter-sidebar a:hover {
+a:hover {
+  color: #4f46e5;
   text-decoration: underline;
-  color: #5a4db2;
 }
 
-/* Boutons dans admin */
-.button {
-  background-color: #7b66cc !important;
-  color: #fff !important;
-  border-radius: 8px !important;
-  border: none !important;
-  padding: 0.5rem 1rem !important;
-  font-weight: 600 !important;
-  box-shadow: 0 3px 6px rgba(123, 102, 204, 0.4) !important;
-  transition: background-color 0.3s ease !important;
+/* HEADER & TOOLS */
+#header {
+  background-color: #6366f1 !important;
+  color: white;
 }
-
-.button:hover {
-  background-color: #5a4db2 !important;
-  box-shadow: 0 5px 10px rgba(90, 77, 178, 0.6) !important;
-}
-
-/* ===== Fieldset général des filtres (list_filter) ===== */
-fieldset.module {
-  background-color: #f4f6fa !important; /* gris très clair */
-  border: 2px solid #7b66cc !important; /* violet doux */
-  border-radius: 8px !important;
-  box-shadow: 0 0 8px rgba(123,102,204,0.15) !important;
-  padding: 1rem !important;
-  font-family: 'Roboto', sans-serif !important;
-  color: #354776 !important; /* bleu profond */
-  margin-bottom: 1rem !important;
-}
-
-/* ===== Legend des filtres - titre ===== */
-fieldset.module > legend {
-  background-image: none !important; /* supprime la flèche */
-  color: #5a4db2 !important; /* violet foncé */
-  font-weight: 700 !important;
-  font-size: 1.25rem !important;
-  padding: 0 0.5rem !important;
-  cursor: default !important;
-  user-select: none !important;
-}
-
-/* ===== Liste des filtres ===== */
-fieldset.module ul {
-  list-style: none !important;
-  padding-left: 0 !important;
-  margin-top: 0.5rem !important;
-}
-
-/* ===== Éléments individuels (li) ===== */
-fieldset.module ul li {
-  margin-bottom: 0.5rem !important;
-}
-
-/* ===== Liens filtres ===== */
-fieldset.module ul li a {
-  color: #7b66cc !important; /* violet doux */
-  text-decoration: none !important;
-  font-weight: 600 !important;
-  transition: color 0.3s ease !important;
-  cursor: pointer !important;
-  user-select: text !important;
-}
-
-/* Hover / focus liens */
-fieldset.module ul li a:hover,
-fieldset.module ul li a:focus {
-  color: #5a4db2 !important; /* violet plus foncé */
-  text-decoration: underline !important;
-  outline: none !important;
-}
-
-/* Lien actif (sélectionné) */
-fieldset.module ul li.selected a,
-fieldset.module ul li.selected a:visited {
-  color: #5a4db2 !important;
-  font-weight: 700 !important;
-  text-decoration: underline !important;
-  cursor: default !important;
-  user-select: none !important;
-}
-
-/* ===== Inputs checkbox et radio ===== */
-fieldset.module input[type="checkbox"],
-fieldset.module input[type="radio"] {
-  accent-color: #7b66cc !important; /* violet doux */
-  cursor: pointer !important;
-  margin-right: 0.5rem !important;
-  vertical-align: middle !important;
-  width: 18px !important;
-  height: 18px !important;
-}
-
-/* Supprimer les images de background (cases cochées par défaut) */
-fieldset.module input[type="checkbox"]:checked,
-fieldset.module input[type="radio"]:checked {
-  background-image: none !important;
-}
-
-/* ===== Sidebar gauche (menu admin) ===== */
-#sidebar {
-  background-color: #f4f6fa !important;
-  border-right: 2px solid #7b66cc !important;
-  font-family: 'Roboto', sans-serif !important;
-}
-
-/* Liens sidebar */
-#sidebar .model-list a {
-  color: #7b66cc !important;
-  font-weight: 600 !important;
-  text-decoration: none !important;
-  display: block !important;
-  padding: 0.5rem 1rem !important;
-  transition: background-color 0.3s ease, color 0.3s ease !important;
-}
-
-/* Hover liens sidebar */
-#sidebar .model-list a:hover,
-#sidebar .model-list a:focus {
-  background-color: #5a4db2 !important;
+#header a, #user-tools a {
   color: white !important;
-  text-decoration: none !important;
-  outline: none !important;
+}
+#user-tools a:hover {
+  text-decoration: underline;
 }
 
-/* Lien actif dans sidebar */
-#sidebar .model-list .selected a,
-#sidebar .model-list a.selected {
-  background-color: #5a4db2 !important;
-  color: white !important;
-  font-weight: 700 !important;
-  cursor: default !important;
+/* SIDEBAR / MENU PRINCIPAL */
+#nav-sidebar {
+  background-color: #f1f5f9;
+  border-right: 1px solid #e2e8f0;
+}
+#nav-sidebar .current-model, #nav-sidebar .model ul li a.active {
+  background-color: #e0e7ff;
+  border-left: 4px solid #6366f1;
+  color: #4f46e5;
 }
 
-/* ===== Boutons admin ===== */
-input[type="submit"], button, .button {
-  background-color: #7b66cc !important;
-  border: none !important;
-  color: white !important;
-  font-weight: 600 !important;
-  padding: 0.5rem 1rem !important;
-  border-radius: 8px !important;
-  box-shadow: 0 3px 6px rgba(123,102,204,0.4) !important;
-  cursor: pointer !important;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease !important;
+/* MODULES */
+.module caption {
+  background: #e0e7ff;
+  color: #1e293b;
+  font-weight: 600;
 }
 
-input[type="submit"]:hover, button:hover, .button:hover {
-  background-color: #5a4db2 !important;
-  box-shadow: 0 5px 10px rgba(90,77,178,0.6) !important;
+/* CHANGELIST FILTER (list_filter) */
+#changelist-filter {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1rem;
 }
 
-/* ===== Messages et notifications admin ===== */
-.messages {
-  font-family: 'Roboto', sans-serif !important;
-  color: #354776 !important;
+#changelist-filter h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 1rem;
 }
 
-/* ===== Titres h1, h2, h3 dans admin ===== */
-h1, h2, h3 {
-  font-family: 'Roboto', sans-serif !important;
-  color: #354776 !important;
-  font-weight: 700 !important;
+#changelist-filter li a {
+  color: #6366f1;
+  font-weight: 500;
+  display: block;
+  padding: 4px 0;
 }
 
-/* ===== Tables de l’admin ===== */
-table {
-  font-family: 'Roboto', sans-serif !important;
-  border-collapse: collapse !important;
-  width: 100% !important;
+#changelist-filter li.selected a {
+  color: #4f46e5;
+  font-weight: 700;
+  border-left: 3px solid #6366f1;
+  padding-left: 6px;
 }
 
-th {
-  background-color: #7b66cc !important;
-  color: white !important;
-  padding: 0.5rem !important;
-  font-weight: 600 !important;
+/* BOUTONS */
+.button, input[type=submit], input[type=button], .submit-row input {
+  background-color: #7b66cc;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-weight: 600;
+  color: white;
+  transition: background-color 0.3s ease;
 }
 
-td {
-  padding: 0.5rem !important;
-  border-bottom: 1px solid #ddd !important;
-  color: #354776 !important;
+.button:hover, .submit-row input:hover {
+  background-color: #5a4db2;
 }
 
-/* Lignes survolées */
-tbody tr:hover {
-  background-color: #f0ebff !important; /* violet très clair */
+/* FIELDSETS */
+fieldset {
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 2rem;
 }
 
-/* ===== Inputs de formulaires ===== */
-input[type="text"], input[type="search"], select, textarea {
-  border: 1px solid #aab5d1 !important;
-  border-radius: 6px !important;
-  padding: 0.4rem 0.6rem !important;
-  font-size: 1rem !important;
-  font-family: 'Roboto', sans-serif !important;
-  color: #354776 !important;
-  background-color: #d8e1f2 !important; /* bleu pastel */
-  transition: border-color 0.3s ease, background-color 0.3s ease !important;
+fieldset h2 {
+  font-size: 1.1rem;
+  color: #1e293b;
 }
 
-input[type="text"]:focus, input[type="search"]:focus, select:focus, textarea:focus {
-  border-color: #7b66cc !important;
-  background-color: #fff !important;
-  outline: none !important;
-  box-shadow: 0 0 6px 2px rgba(123,102,204,0.3) !important;
+/* FORM INPUTS */
+input[type="text"], select, textarea {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  font-size: 1rem;
+  background-color: #f1f5f9;
+  width: 100%;
+  transition: border 0.3s ease, background-color 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #6366f1;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.3);
+  outline: none;
 }

@@ -52,10 +52,12 @@ services:
   web:
     build: .
     command: >
-      sh -c "./wait-for-it.sh db:${DB_PORT} --timeout=180 --strict -- 
-            python manage.py migrate &&
-            python manage.py collectstatic --noinput &&
-            python manage.py runserver 0.0.0.0:8000"
+      sh -c "
+        ./wait-for-it.sh db:${DB_PORT} --timeout=180 --strict -- \
+        python manage.py migrate && \
+        python manage.py collectstatic --noinput && \
+        python manage.py runserver 0.0.0.0:8000
+      "
     volumes:
       - .:/app
       - /home/baraka/ftp/files:/app/imports

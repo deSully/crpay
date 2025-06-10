@@ -85,6 +85,24 @@ class TransactionAdmin(admin.ModelAdmin):
         extra_context = extra_context or {}
         extra_context["title"] = "Liste des paiements"
         extra_context["custom_stats_link"] = "/admin/transaction/transaction/stats/"
+        extra_context["custom_stats_title"] = "Statistiques des transactions"
+        extra_context["custom_stats_description"] = (
+            "Consultez les statistiques des transactions sur une période donnée. "
+            "Vous pouvez filtrer par date et par type de transaction."
+        )
+        extra_context["custom_stats_help_text"] = (
+            "Sélectionnez une période pour afficher les statistiques des transactions. "
+            "Vous pouvez également filtrer par type de transaction."
+        )
+        extra_context["subtitle"] = "Gérer les transactions de l'application"
+        extra_context["description"] = (
+            "Cette section vous permet de gérer les transactions effectuées dans l'application. "
+            "Vous pouvez consulter les détails des transactions, exporter des données et accéder aux statistiques."
+        )
+        extra_context["help_text"] = (
+            "Pour ajouter une nouvelle transaction, utilisez l'API. "
+            "Pour consulter les transactions existantes, utilisez les filtres disponibles."
+        )
         return super().changelist_view(request, extra_context=extra_context)
 
     def colored_status(self, obj):

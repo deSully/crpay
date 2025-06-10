@@ -63,6 +63,15 @@ class EntityAdmin(admin.ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
         extra_context["title"] = "Liste des entités (Marchands, Clients, Partenaires)"
+        extra_context["subtitle"] = "Gérer les entités de l'application"
+        extra_context["description"] = (
+            "Cette section vous permet de gérer les entités de l'application, "
+            "y compris les marchands, les clients et les partenaires."
+        )
+        extra_context["help_text"] = (
+            "Pour ajouter une nouvelle entité, cliquez sur 'Ajouter une entité'. "
+            "Pour modifier ou supprimer une entité existante, utilisez les actions disponibles."
+        )
         return super().changelist_view(request, extra_context=extra_context)
 
     def is_internal(self, request):

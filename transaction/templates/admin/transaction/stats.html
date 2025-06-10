@@ -12,20 +12,23 @@
 
 <!-- Résumé -->
 <div class="summary-container">
-  <div class="summary-card summary-blue "
-  >
+  <div class="summary-card summary-blue">
+    <i class="fas fa-coins summary-icon"></i>
     <strong>Montant total payé sur la période :</strong><br>
     <span class="summary-value">{{ total_amount_paid }} {{ currency }}</span>
   </div>
   <div class="summary-card summary-green">
+    <i class="fas fa-chart-line summary-icon"></i>
     <strong>Montant moyen par transaction :</strong><br>
     <span class="summary-value">{{ avg_amount_paid }} {{ currency }}</span>
   </div>
   <div class="summary-card summary-orange">
+    <i class="fas fa-calendar-day summary-icon"></i>
     <strong>Montant total payé <u>aujourd’hui</u> :</strong><br>
     <span class="summary-value">{{ total_today }} {{ currency }}</span>
   </div>
 </div>
+
 
 <!-- Conteneur principal -->
 <div class="main-container">

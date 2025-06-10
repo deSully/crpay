@@ -1,0 +1,18 @@
+{% extends "admin/base.html" %}
+
+{% block usertools %}
+  <div id="user-tools" style="display: flex; align-items: center; gap: 10px;">
+    <span style="font-weight: bold; color: #6A0DAD;">
+      Bienvenue sur la plateforme, {{ user.get_username }}.
+    </span>
+    <a href="{% url 'admin:index' %}" style="color: #4B0082; text-decoration: underline;">
+      Accueil
+    </a> /
+    <a href="{% url 'admin:password_change' %}" style="color: #4B0082; text-decoration: underline;">
+      Modifier mon mot de passe
+    </a> /
+    <a href="{% url 'admin:logout' %}" style="color: #4B0082; text-decoration: underline;">
+      Se déconnecter
+    </a>
+  </div>
+{% endblock %}

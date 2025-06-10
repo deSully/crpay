@@ -1,9 +1,13 @@
-/* TYPOGRAPHIE GÉNÉRALE */
-body, .module h2, .submit-row input {
+/* ===========================
+    TYPOGRAPHIE GÉNÉRALE
+=========================== */
+body, .module h2, .submit-row input, .page-title {
   font-family: 'Roboto', sans-serif;
 }
 
-/* LIENS */
+/* ===========================
+    LIENS GÉNÉRAUX
+=========================== */
 a, a:visited {
   color: #6366f1;
   text-decoration: none;
@@ -15,7 +19,9 @@ a:hover {
   text-decoration: underline;
 }
 
-/* HEADER & TOOLS */
+/* ===========================
+    HEADER & TOOLS (Admin)
+=========================== */
 #header {
   background-color: #6366f1 !important;
   color: white;
@@ -27,7 +33,9 @@ a:hover {
   text-decoration: underline;
 }
 
-/* SIDEBAR / MENU PRINCIPAL */
+/* ===========================
+    SIDEBAR / MENU PRINCIPAL
+=========================== */
 #nav-sidebar {
   background-color: #f1f5f9;
   border-right: 1px solid #e2e8f0;
@@ -38,14 +46,18 @@ a:hover {
   color: #4f46e5;
 }
 
-/* MODULES */
+/* ===========================
+    MODULES
+=========================== */
 .module caption {
   background: #e0e7ff;
   color: #1e293b;
   font-weight: 600;
 }
 
-/* CHANGELIST FILTER (list_filter) */
+/* ===========================
+    LIST FILTER
+=========================== */
 #changelist-filter {
   background-color: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -74,49 +86,214 @@ a:hover {
   padding-left: 6px;
 }
 
-/* BOUTONS */
-.button, input[type=submit], input[type=button], .submit-row input {
+/* ===========================
+    BOUTONS GÉNÉRAUX
+=========================== */
+.button, input[type=submit], input[type=button], .submit-row input, .btn-success {
   background-color: #7b66cc;
   border: none;
-  border-radius: 6px;
-  padding: 0.5rem 1.2rem;
-  font-weight: 600;
+  border-radius: 14px;
+  padding: 0.7rem 1.5rem;
+  font-weight: 700;
   color: white;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(123, 102, 204, 0.4);
 }
 
-.button:hover, .submit-row input:hover {
+.button:hover, .submit-row input:hover, .btn-success:hover {
   background-color: #5a4db2;
+  box-shadow: 0 6px 14px rgba(90, 77, 178, 0.7);
 }
 
-/* FIELDSETS */
-fieldset {
+/* ===========================
+    FIELDSETS
+=========================== */
+fieldset, .filter-fieldset {
   border: 1px solid #e2e8f0;
   background-color: #f8fafc;
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 1rem 1.2rem;
   margin-bottom: 2rem;
 }
 
-fieldset h2 {
-  font-size: 1.1rem;
+fieldset h2, .filter-legend {
+  font-size: 1.3rem;
+  font-weight: 600;
   color: #1e293b;
+  margin-bottom: 1rem;
 }
 
-/* FORM INPUTS */
-input[type="text"], select, textarea {
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  padding: 0.4rem 0.6rem;
-  font-size: 1rem;
-  background-color: #f1f5f9;
+/* ===========================
+    FORM INPUTS
+=========================== */
+input[type="text"], select, textarea, .filter-input, .filter-select {
+  border: 1.5px solid #aab5d1;
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  font-size: 1.1rem;
+  background-color: #e6e4f0;
+  color: #354776;
   width: 100%;
-  transition: border 0.3s ease, background-color 0.3s ease;
+  transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
 }
 
-input:focus, select:focus, textarea:focus {
-  border-color: #6366f1;
+input:focus, select:focus, textarea:focus, .filter-input:focus, .filter-select:focus {
+  border-color: #5a4db2;
   background-color: #ffffff;
-  box-shadow: 0 0 0 2px rgba(99,102,241,0.3);
+  box-shadow: 0 0 8px 3px rgba(91, 75, 138, 0.3);
   outline: none;
+}
+
+/* ===========================
+    PAGE ACCUEIL (Home)
+=========================== */
+h1 {
+  font-size: 1.8rem;
+  color: #0a2f5c;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.dashboard-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 3rem;
+  justify-items: center;
+  margin: 2rem auto 0 auto;
+  padding: 0 1rem;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.dashboard-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 2rem 2.5rem;
+  background-color: #ffffff;
+  color: #0a2f5c;
+  border: 2px solid #0a2f5c;
+  border-radius: 14px;
+  font-size: 1.3rem;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+  min-width: 280px;
+  max-width: 380px;
+  box-shadow: 0 4px 12px rgba(10, 47, 92, 0.15);
+  cursor: pointer;
+}
+
+.dashboard-button:hover {
+  background-color: #5b4b8a;
+  border-color: #5b4b8a;
+  color: #e0d7f5;
+  box-shadow: 0 8px 20px rgba(91, 75, 138, 0.5);
+  transform: translateY(-4px);
+}
+
+.dashboard-button i {
+  font-size: 2.4rem;
+  color: #0a2f5c;
+  transition: color 0.3s ease;
+}
+
+.dashboard-button:hover i {
+  color: #e0d7f5;
+}
+
+/* ===========================
+    STATS PAGE
+=========================== */
+.page-title {
+  font-weight: 600;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #354776;
+  text-align: center;
+}
+
+.summary-container {
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+  font-size: 1.2rem;
+}
+
+.summary-card {
+  flex: 1;
+  min-width: 220px;
+  padding: 1.2rem;
+  border-radius: 14px;
+  background-color: #e6e4f0;
+  color: #354776;
+  box-shadow: 0 3px 8px rgba(123, 102, 204, 0.15);
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  cursor: default;
+}
+
+.summary-card:hover {
+  box-shadow: 0 6px 16px rgba(91, 75, 138, 0.3);
+  background-color: #f0eef8;
+}
+
+.summary-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #5a4db2;
+}
+
+.main-container {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  padding: 0 1rem;
+}
+
+.filter-form {
+  flex: 0 0 380px;
+}
+
+.filter-button-wrapper {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.5rem;
+  flex: 1 1 auto;
+}
+
+.chart-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 1.8rem 1.2rem;
+  box-shadow: 0 6px 16px rgba(53, 71, 118, 0.1);
+  transition: box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chart-card:hover {
+  box-shadow: 0 8px 22px rgba(123, 102, 204, 0.25);
+}
+
+.chart-title {
+  margin-bottom: 1.2rem;
+  font-weight: 600;
+  color: #5a4db2;
+  text-align: center;
+  font-size: 1.25rem;
+}
+
+.chart-canvas {
+  max-width: 100%;
+  height: 220px;
 }

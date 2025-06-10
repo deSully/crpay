@@ -3,7 +3,7 @@
 {% block usertools %}
   <div id="user-tools" style="display: flex; align-items: center; gap: 10px;">
     <span style="font-weight: bold; color: #fff;">
-      Bienvenue sur la plateforme, {{ user.get_username }}.
+      Bienvenue sur la plateforme, {{ user.username }}.
     </span>
     <a href="{% url 'admin:index' %}" style="color: #4B0082; text-decoration: underline;">
       Accueil

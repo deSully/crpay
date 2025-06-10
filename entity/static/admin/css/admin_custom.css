@@ -23,12 +23,15 @@ a:hover {
     HEADER & TOOLS (Admin)
 =========================== */
 #header {
-  background-color: #6366f1 !important;
+  background-color: #6366f1 !important; /* pour forcer sur les styles d’admin */
   color: white;
 }
-#header a, #user-tools a {
+
+#header a, 
+#user-tools a {
   color: white !important;
 }
+
 #user-tools a:hover {
   text-decoration: underline;
 }
@@ -40,7 +43,9 @@ a:hover {
   background-color: #f1f5f9;
   border-right: 1px solid #e2e8f0;
 }
-#nav-sidebar .current-model, #nav-sidebar .model ul li a.active {
+
+#nav-sidebar .current-model, 
+#nav-sidebar .model ul li a.active {
   background-color: #e0e7ff;
   border-left: 4px solid #6366f1;
   color: #4f46e5;
@@ -89,7 +94,11 @@ a:hover {
 /* ===========================
     BOUTONS GÉNÉRAUX
 =========================== */
-.button, input[type=submit], input[type=button], .submit-row input, .btn-success {
+.button, 
+input[type=submit], 
+input[type=button], 
+.submit-row input, 
+.btn-success {
   background-color: #7b66cc;
   border: none;
   border-radius: 14px;
@@ -101,7 +110,9 @@ a:hover {
   box-shadow: 0 4px 8px rgba(123, 102, 204, 0.4);
 }
 
-.button:hover, .submit-row input:hover, .btn-success:hover {
+.button:hover, 
+.submit-row input:hover, 
+.btn-success:hover {
   background-color: #5a4db2;
   box-shadow: 0 6px 14px rgba(90, 77, 178, 0.7);
 }
@@ -109,7 +120,8 @@ a:hover {
 /* ===========================
     FIELDSETS
 =========================== */
-fieldset, .filter-fieldset {
+fieldset, 
+.filter-fieldset {
   border: 1px solid #e2e8f0;
   background-color: #f8fafc;
   border-radius: 12px;
@@ -117,7 +129,8 @@ fieldset, .filter-fieldset {
   margin-bottom: 2rem;
 }
 
-fieldset h2, .filter-legend {
+fieldset h2, 
+.filter-legend {
   font-size: 1.3rem;
   font-weight: 600;
   color: #1e293b;
@@ -127,7 +140,11 @@ fieldset h2, .filter-legend {
 /* ===========================
     FORM INPUTS
 =========================== */
-input[type="text"], select, textarea, .filter-input, .filter-select {
+input[type="text"], 
+select, 
+textarea, 
+.filter-input, 
+.filter-select {
   border: 1.5px solid #aab5d1;
   border-radius: 10px;
   padding: 0.6rem 0.8rem;
@@ -139,7 +156,11 @@ input[type="text"], select, textarea, .filter-input, .filter-select {
   box-sizing: border-box;
 }
 
-input:focus, select:focus, textarea:focus, .filter-input:focus, .filter-select:focus {
+input:focus, 
+select:focus, 
+textarea:focus, 
+.filter-input:focus, 
+.filter-select:focus {
   border-color: #5a4db2;
   background-color: #ffffff;
   box-shadow: 0 0 8px 3px rgba(91, 75, 138, 0.3);

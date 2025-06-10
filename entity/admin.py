@@ -125,3 +125,17 @@ class AppUserAdmin(UserAdmin):
             },
         ),
     )
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context["title"] = "Liste des Agents (Utilisateurs de l’application)"
+        extra_context["subtitle"] = "Gérer les utilisateurs de l'application"
+        extra_context["description"] = (
+            "Cette section vous permet de gérer les utilisateurs de l'application, "
+            "y compris les agents et les administrateurs."
+        )
+        extra_context["help_text"] = (
+            "Pour ajouter un nouvel utilisateur, cliquez sur 'Ajouter un utilisateur'. "
+            "Pour modifier ou supprimer un utilisateur existant, utilisez les actions disponibles."
+        )
+        return super().changelist_view(request, extra_context=extra_context)

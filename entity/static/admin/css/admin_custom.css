@@ -238,50 +238,42 @@ h1 {
 
 .summary-container {
   display: flex;
-  gap: 20px;
-  margin: 20px 0;
+  gap: 2.5rem;
   flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+  font-size: 1.2rem;
 }
 
 .summary-card {
   flex: 1;
-  min-width: 250px;
-  padding: 20px;
-  border-radius: 12px;
-  color: #fff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-  position: relative;
+  min-width: 220px;
+  padding: 1.2rem;
+  border-radius: 14px;
+  background-color: #e6e4f0;
+  color: #354776;
+  box-shadow: 0 3px 8px rgba(123, 102, 204, 0.15);
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  cursor: default;
 }
 
 .summary-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.summary-icon {
-  font-size: 30px;
-  margin-bottom: 10px;
-  display: block;
-}
-
-.summary-blue {
-  background-color: #6c63ff; /* Violet doux */
-}
-
-.summary-green {
-  background-color: #28c76f; /* Vert doux */
-}
-
-.summary-orange {
-  background-color: #ff9f43; /* Orange doux */
+  box-shadow: 0 6px 16px rgba(91, 75, 138, 0.3);
+  background-color: #f0eef8;
 }
 
 .summary-value {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #5a4db2;
 }
 
+.main-container {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  padding: 0 1rem;
+}
 
 .filter-form {
   flex: 0 0 380px;
@@ -327,3 +319,24 @@ h1 {
   height: 220px;
 }
 
+/* Couleurs spécifiques */
+.summary-blue {
+  background-color: #e0e7ff; /* Bleu violet très doux */
+}
+
+.summary-green {
+  background-color: #d4f5e9; /* Vert pastel */
+}
+
+.summary-orange {
+  background-color: #ffe9d6; /* Orange clair */
+}
+
+/* Icône stylée */
+.summary-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.8rem;
+  color: #5a4db2; /* Ta couleur principale */
+  display: block;
+  text-align: center;
+}

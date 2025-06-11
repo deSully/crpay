@@ -334,7 +334,7 @@ h1 {
 
 /* Icône stylée */
 .summary-icon {
-  font-size: 2.2rem;
+  font-size: 2.5rem; /* Taille de l'icône */
   margin-bottom: 0.8rem;
   color: #5a4db2; /* Ta couleur principale */
   display: block;

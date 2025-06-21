@@ -1,57 +1,51 @@
-/*
-    DJANGO Admin styles
-*/
-
-/* VARIABLE DEFINITIONS */
 html[data-theme="light"],
 :root {
-    --primary: #7B68EE;          /* Medium Slate Blue - violet doux */
-    --secondary: #5A4E8C;        /* Dark Slate Blue - violet plus sombre */
-    --accent: #C49CFF;           /* Lavande clair - accent lumineux */
-    --primary-fg: #fff;          /* Texte clair sur violet */
+    --primary: #4F46E5;          /* Indigo raffiné */
+    --secondary: #4338CA;        /* Indigo foncé */
+    --accent: #A5B4FC;           /* Indigo clair, lumineux */
+    --primary-fg: #FFFFFF;       /* Texte blanc */
 
-    --body-fg: #2E2E2E;          /* Gris foncé pour le texte */
-    --body-bg: #FAFAFF;          /* Blanc très légèrement teinté violet */
-    --body-quiet-color: #6B5F82; /* Gris violet doux */
-    --body-medium-color: #4B3C69;/* Violet gris moyen */
-    --body-loud-color: #3A2F56;  /* Violet foncé presque noir */
+    --body-fg: #1F2937;          /* Gris très foncé, presque noir */
+    --body-bg: #F9FAFB;          /* Gris ultra clair, proche du blanc */
+    --body-quiet-color: #6B7280; /* Gris neutre */
+    --body-medium-color: #4B5563;/* Gris foncé */
+    --body-loud-color: #111827;  /* Noir bleuté */
 
-    --header-color: #E6DFFF;     /* Très clair lavande */
+    --header-color: #E0E7FF;     /* Indigo très pâle */
     --header-branding-color: var(--accent);
     --header-bg: var(--secondary);
     --header-link-color: var(--primary-fg);
 
-    --breadcrumbs-fg: #A59BD8;   /* Lavande gris clair */
+    --breadcrumbs-fg: #9CA3AF;   /* Gris doux */
     --breadcrumbs-link-fg: var(--body-bg);
-    --breadcrumbs-bg: #4B3C69;   /* Violet foncé */
+    --breadcrumbs-bg: #3730A3;   /* Indigo profond */
 
-    --link-fg: #7B68EE;          /* Même que primary */
-    --link-hover-color: #574C8A; /* Plus sombre au hover */
+    --link-fg: #4F46E5;          /* Indigo raffiné */
+    --link-hover-color: #4338CA; /* Indigo foncé */
     --link-selected-fg: var(--secondary);
 
-    --hairline-color: #D3CFF8;   /* Ligne très claire violet */
-    --border-color: #B9AFFF;     /* Bordure lilas clair */
+    --hairline-color: #E5E7EB;   /* Gris très clair */
+    --border-color: #D1D5DB;     /* Gris clair */
 
-    --error-fg: #D9534F;         /* Rouge légèrement rosé */
+    --error-fg: #EF4444;         /* Rouge vif élégant */
 
-    --message-success-bg: #E5E0FF; /* Fond très pâle violet */
-    --message-warning-bg: #FFF5CC; /* Fond jaune pâle */
-    --message-error-bg: #FFE6E6;   /* Fond rouge clair */
+    --message-success-bg: #ECFDF5; /* Vert pâle */
+    --message-warning-bg: #FEF9C3; /* Jaune doux */
+    --message-error-bg: #FEE2E2;   /* Rouge clair */
 
-    --darkened-bg: #EDEAFF;      /* Fond légèrement violet */
-    --selected-bg: #C4BBF9;      /* Fond sélectionné lilas */
-    --selected-row: #DCD6FF;     /* Ligne sélectionnée lavande claire */
+    --darkened-bg: #F3F4F6;      /* Gris neutre */
+    --selected-bg: #E0E7FF;      /* Indigo très clair */
+    --selected-row: #EEF2FF;     /* Indigo grisé clair */
 
-    --button-fg: #fff;
+    --button-fg: #FFFFFF;
     --button-bg: var(--secondary);
-    --button-hover-bg: #3F3474;  /* Violet très foncé */
-    --default-button-bg: #3F3474;
+    --button-hover-bg: #3730A3;  /* Indigo très foncé */
+    --default-button-bg: #3730A3;
     --default-button-hover-bg: var(--secondary);
-    --close-button-bg: #7E7A9D;  /* Gris violet */
-    --close-button-hover-bg: #5A5479; /* Plus foncé */
-    --delete-button-bg: #D9534F;  /* Rouge pour delete */
-    --delete-button-hover-bg: #B93F3A;
-
+    --close-button-bg: #9CA3AF;  /* Gris neutre */
+    --close-button-hover-bg: #6B7280; /* Gris plus foncé */
+    --delete-button-bg: #EF4444;  /* Rouge vif */
+    --delete-button-hover-bg: #B91C1C;
 
     --object-tools-fg: var(--button-fg);
     --object-tools-bg: var(--close-button-bg);
@@ -89,6 +83,7 @@ html[data-theme="light"],
 
     color-scheme: light;
 }
+
 
 html, body {
     height: 100%;

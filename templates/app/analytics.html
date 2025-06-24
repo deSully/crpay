@@ -65,7 +65,7 @@
 <body class="bg-gray-50">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-       <div class="sidebar bg-violet-800 text-white w-64 fixed h-full">
+        <div class="sidebar bg-violet-800 text-white w-64 fixed h-full">
             <div class="p-4 flex items-center">
                 <div class="logo-icon text-2xl">
                     <i class="fas fa-wallet"></i>
@@ -77,12 +77,12 @@
             </div>
             <nav class="mt-8">
                 <div class="px-4 py-2 text-violet-200 uppercase text-xs font-bold">Main</div>
-                <a href="{% url 'dashboard' %}" class="flex items-center px-4 py-3 text-white bg-violet-700">
+                <a href="{% url 'dashboard' %}" class="flex items-center px-4 py-3 text-white bg-violet-900">
                     <i class="fas fa-tachometer-alt"></i>
                     <span class="nav-text ml-3">Tableau de bord</span>
                 </a>
                 <div class="px-4 py-2 text-violet-200 uppercase text-xs font-bold">Payments</div>
-                <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-violet-900">
+                <a href="{% url 'payments' %}" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
                     <i class="fas fa-money-bill-wave"></i>
                     <span class="nav-text ml-3">Paiments</span>
                 </a>
@@ -93,7 +93,7 @@
                 <div class="px-4 py-2 text-violet-200 uppercase text-xs font-bold">Management</div>
                 <a href="{% url 'partners' %}" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
                     <i class="fas fa-handshake"></i>
-                    <span class="nav-text ml-3">Partenaires et Agentss</span>
+                    <span class="nav-text ml-3">Partenaires et Agents</span>
                 </a>
                 <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
                     <i class="fas fa-users"></i>

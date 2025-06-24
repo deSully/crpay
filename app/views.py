@@ -24,3 +24,9 @@ def payments(request):
     Render the payments page.
     """
     return render(request, 'app/payments.html')
+
+def login(request):
+    """
+    Render the login page.
+    """
+    return render(request, 'app/login.html')

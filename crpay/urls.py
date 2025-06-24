@@ -22,15 +22,17 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/v0/entities/", include("entity.urls")),  # URLs pour les produits
-    path("api/v0/payments/", include("transaction.urls")),  # URLs pour les produits
-
+    path("api/v0/entities/", include("entity.urls")),
+    path("api/v0/payments/", include("transaction.urls")),
+    path("app/", include("app.urls")),
+    
     # Documentation Swagger
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path(
         
         "swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="swagger-ui"
     ),
+
 ]
 
 if settings.DEBUG:

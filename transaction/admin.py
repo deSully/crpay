@@ -15,7 +15,7 @@ from django.utils.timezone import now
 from django_json_widget.widgets import JSONEditorWidget
 from rangefilter.filters import DateRangeFilter
 
-from transaction.models import Transaction  # adapte selon ton import
+from transaction.models import Transaction
 from transaction.utils import ExternalTransactionDispatcher
 
 from .models import InTouchLog

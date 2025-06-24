@@ -20,7 +20,7 @@ class InTouchCallbackView(APIView):
         reference = data.get("idFromClient")
         new_status = data.get(
             "status"
-        )  # À adapter si le champ réel s'appelle autrement
+        )
 
         if not reference:
             logger.warning("Callback reçu sans 'idFromClient'.")
@@ -48,12 +48,10 @@ class InTouchCallbackView(APIView):
                 "Status non reconnu ou manquant pour la transaction %s.", reference
             )
 
-        # Mise à jour du status transaction
         if new_status and new_status.upper() in ["SUCCESS", "FAILED"]:
             transaction.status = new_status.upper()
             transaction.save(update_fields=["status", "updated_at"])
 
-        # Mise à jour ou création du log
         InTouchLog.objects.update_or_create(
             transaction=transaction,
             defaults={

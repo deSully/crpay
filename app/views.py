@@ -30,3 +30,9 @@ def login(request):
     Render the login page.
     """
     return render(request, 'app/login.html')
+
+def password_reset(request):
+    """
+    Render the password reset page.
+    """
+    return render(request, 'app/password_reset.html')

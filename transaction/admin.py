@@ -186,7 +186,7 @@ class TransactionAdmin(admin.ModelAdmin):
             or 0
         )
 
-        # 1. Transactions par jour
+        # 1. Paiments par jour
         tx_per_day = (
             qs.annotate(date=TruncDate("created_at"))
             .values("date")
@@ -207,7 +207,7 @@ class TransactionAdmin(admin.ModelAdmin):
         # Moyenne montants par jour (déjà faite globalement, mais on peut aussi la calculer par jour)
         avg_amounts_per_day = round(total_amount_paid / max(len(sums_days), 1), 2)
 
-        # 2. Transactions par purpose
+        # 2. Paiments par purpose
         tx_per_purpose = (
             qs.values("purpose")
             .annotate(count=Count("uuid"), sum_amount=Sum("amount"))
@@ -231,7 +231,7 @@ class TransactionAdmin(admin.ModelAdmin):
         labels_status = [entry["status"] for entry in status_counts]
         counts_status = [entry["count"] for entry in status_counts]
 
-        # 4. Transactions par heure (0-23)
+        # 4. Paiments par heure (0-23)
         tx_per_hour = (
             qs.annotate(hour=ExtractHour("created_at"))
             .values("hour")

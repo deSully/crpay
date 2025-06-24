@@ -73,7 +73,7 @@
       onmouseenter="this.style.boxShadow='0 12px 24px rgba(0,0,0,0.15)';"
       onmouseleave="this.style.boxShadow='0 6px 12px rgba(0,0,0,0.08)';"
     >
-      <h2 class="chart-title">Paiments par jour</h2>
+      <h2 class="chart-title">Paiements par jour</h2>
       <canvas id="txPerDayChart" class="chart-canvas"></canvas>
     </div>
   
@@ -82,7 +82,7 @@
       onmouseenter="this.style.boxShadow='0 12px 24px rgba(0,0,0,0.15)';"
       onmouseleave="this.style.boxShadow='0 6px 12px rgba(0,0,0,0.08)';"
     >
-      <h2 class="chart-title">Paiments par libellé</h2>
+      <h2 class="chart-title">Paiements par libellé</h2>
       <canvas id="txPerPurposeChart" class="chart-canvas"></canvas>
     </div>
   
@@ -157,7 +157,7 @@
       data: {
         labels: {{ labels_days|safe }},
         datasets: [{
-          label: 'Paiments/jour',
+          label: 'Paiements/jour',
           data: {{ counts_days|safe }},
           backgroundColor: colors.blue,
           borderColor: colors.blueBorder,
@@ -179,7 +179,7 @@
       data: {
         labels: {{ labels_purpose|safe }},
         datasets: [{
-          label: 'Paiments/libellé',
+          label: 'Paiements/libellé',
           data: {{ counts_purpose|safe }},
           backgroundColor: colors.green,
           borderColor: colors.greenBorder,
@@ -219,7 +219,7 @@
       data: {
         labels: {{ labels_days|safe }},
         datasets: [{
-          label: 'Paiments/jour (ligne)',
+          label: 'Paiements/jour (ligne)',
           data: {{ counts_days|safe }},
           fill: false,
           borderColor: colors.purple,

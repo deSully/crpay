@@ -47,46 +47,55 @@
 </head>
 <body class="bg-gray-50 font-sans flex">
     <!-- Sidebar -->
-    <div class="w-64 bg-violet-700 text-white h-screen sticky top-0">
-        <div class="p-4">
-            <h2 class="text-xl font-bold mb-8">Admin Panel</h2>
-            <nav>
-                <ul class="space-y-2">
-                    <li>
-                        <a href="#" class="flex items-center p-2 rounded hover:bg-violet-600">
-                            <i class="fas fa-tachometer-alt mr-3"></i>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center p-2 rounded bg-violet-800">
-                            <i class="fas fa-handshake mr-3"></i>
-                            Partners & Agents
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center p-2 rounded hover:bg-violet-600">
-                            <i class="fas fa-users mr-3"></i>
-                            Customers
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center p-2 rounded hover:bg-violet-600">
-                            <i class="fas fa-chart-line mr-3"></i>
-                            Reports
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center p-2 rounded hover:bg-violet-600">
-                            <i class="fas fa-cog mr-3"></i>
-                            Settings
-                        </a>
-                    </li>
-                </ul>
+    <div class="sidebar bg-violet-800 text-white w-64 fixed h-full">
+            <div class="p-4 flex items-center">
+                <div class="logo-icon text-2xl">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div class="logo-text ml-3 text-xl font-bold">PayAdmin</div>
+                <button id="toggleSidebar" class="ml-auto md:hidden">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="mt-8">
+                <div class="px-4 py-2 text-violet-200 uppercase text-xs font-bold">Main</div>
+                <a href="{% url 'dashboard' %}" class="flex items-center px-4 py-3 text-white bg-violet-900">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span class="nav-text ml-3">Dashboard</span>
+                </a>
+                <div class="px-4 py-2 text-violet-200 uppercase text-xs font-bold">Payments</div>
+                <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span class="nav-text ml-3">Transactions</span>
+                </a>
+                <a href="{% url 'analytics' %}" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
+                    <i class="fas fa-chart-pie"></i>
+                    <span class="nav-text ml-3">Analytics</span>
+                </a>
+                <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span class="nav-text ml-3">Invoices</span>
+                </a>
+                <div class="px-4 py-2 text-violet-200 uppercase text-xs font-bold">Management</div>
+                <a href="{% url 'partners' %}" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
+                    <i class="fas fa-handshake"></i>
+                    <span class="nav-text ml-3">Partners & Agents</span>
+                </a>
+                <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
+                    <i class="fas fa-users"></i>
+                    <span class="nav-text ml-3">Customers</span>
+                </a>
+                <div class="absolute bottom-0 w-full p-4">
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" class="w-10 h-10 rounded-full">
+                        <div class="nav-text ml-3">
+                            <div class="font-medium">Admin User</div>
+                            <div class="text-xs text-violet-200">Super Admin</div>
+                        </div>
+                    </div>
+                </div>
             </nav>
         </div>
-        </div>
-    </div>
 
     <!-- Main Content -->
     <div class="flex-1 overflow-auto">

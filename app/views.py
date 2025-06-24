@@ -18,3 +18,9 @@ def partners(request):
     Render the partners page.
     """
     return render(request, 'app/partners.html')
+
+def payments(request):
+    """
+    Render the payments page.
+    """
+    return render(request, 'app/payments.html')

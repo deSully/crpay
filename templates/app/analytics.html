@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analytics Tableau de bord</title>
+    <title>Analytics</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -65,7 +65,7 @@
 <body class="bg-gray-50">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-         <div class="sidebar bg-violet-800 text-white w-64 fixed h-full">
+       <div class="sidebar bg-violet-800 text-white w-64 fixed h-full">
             <div class="p-4 flex items-center">
                 <div class="logo-icon text-2xl">
                     <i class="fas fa-wallet"></i>
@@ -81,24 +81,19 @@
                     <i class="fas fa-tachometer-alt"></i>
                     <span class="nav-text ml-3">Tableau de bord</span>
                 </a>
-                <div class="px-4 py-2 text-violet-200 uppercase text-xs font-bold">Paiements</div>
-                <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
+                <div class="px-4 py-2 text-violet-200 uppercase text-xs font-bold">Payments</div>
+                <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-violet-900">
                     <i class="fas fa-money-bill-wave"></i>
                     <span class="nav-text ml-3">Paiments</span>
                 </a>
-                <a href="{% url 'analytics' %}" class="flex items-center px-4 py-3 text-white hover:bg-violet-900">
+                <a href="{% url 'analytics' %}" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
                     <i class="fas fa-chart-pie"></i>
                     <span class="nav-text ml-3">Analytics</span>
                 </a>
-
                 <div class="px-4 py-2 text-violet-200 uppercase text-xs font-bold">Management</div>
-                <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
+                <a href="{% url 'partners' %}" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
                     <i class="fas fa-handshake"></i>
-                    <span class="nav-text ml-3">Partners</span>
-                </a>
-                <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
-                    <i class="fas fa-user-tie"></i>
-                    <span class="nav-text ml-3">Agents</span>
+                    <span class="nav-text ml-3">Partenaires et Agentss</span>
                 </a>
                 <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
                     <i class="fas fa-users"></i>

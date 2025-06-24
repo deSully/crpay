@@ -6,3 +6,9 @@ def dashboard(request):
     Render the dashboard page.
     """
     return render(request, 'app/dashboard.html')
+
+def analytics(request):
+    """
+    Render the analytics page.
+    """
+    return render(request, 'app/analytics.html')

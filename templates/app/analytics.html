@@ -1,0 +1,502 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        violet: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            300: '#c4b5fd',
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                            800: '#5b21b6',
+                            900: '#4c1d95',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .sidebar-collapsed {
+            width: 80px;
+            overflow: hidden;
+        }
+        .sidebar-collapsed .menu-text {
+            display: none;
+        }
+        .sidebar-collapsed .logo-text {
+            display: none;
+        }
+        .sidebar-collapsed .menu-item {
+            justify-content: center;
+        }
+        .content-expanded {
+            margin-left: 80px;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: absolute;
+                z-index: 50;
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .content {
+                margin-left: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="sidebar bg-violet-800 text-white transition-all duration-300 flex flex-col w-64 shrink-0">
+            <!-- Logo -->
+            <div class="p-4 flex items-center space-x-2 border-b border-violet-700">
+                <i class="fas fa-chart-line text-2xl"></i>
+                <span class="logo-text text-xl font-bold">AnalyticsPro</span>
+            </div>
+            
+            <!-- Menu -->
+            <div class="flex-1 overflow-y-auto py-4">
+                <div class="space-y-2 px-4">
+                    <a href="#" class="menu-item flex items-center space-x-3 p-3 rounded-lg bg-violet-900">
+                        <i class="fas fa-home"></i>
+                        <span class="menu-text">Dashboard</span>
+                    </a>
+                    <a href="#" class="menu-item flex items-center space-x-3 p-3 rounded-lg hover:bg-violet-700">
+                        <i class="fas fa-wallet"></i>
+                        <span class="menu-text">Payments</span>
+                    </a>
+                    <a href="#" class="menu-item flex items-center space-x-3 p-3 rounded-lg hover:bg-violet-700">
+                        <i class="fas fa-users"></i>
+                        <span class="menu-text">Customers</span>
+                    </a>
+                    <a href="#" class="menu-item flex items-center space-x-3 p-3 rounded-lg hover:bg-violet-700">
+                        <i class="fas fa-store"></i>
+                        <span class="menu-text">Services</span>
+                    </a>
+                    <a href="#" class="menu-item flex items-center space-x-3 p-3 rounded-lg hover:bg-violet-700">
+                        <i class="fas fa-handshake"></i>
+                        <span class="menu-text">Partners</span>
+                    </a>
+                    <a href="#" class="menu-item flex items-center space-x-3 p-3 rounded-lg hover:bg-violet-700">
+                        <i class="fas fa-cog"></i>
+                        <span class="menu-text">Settings</span>
+                    </a>
+                </div>
+                
+                <div class="px-4 pt-8">
+                    <div class="text-xs uppercase text-violet-300 mb-2 menu-text">Reports</div>
+                    <a href="#" class="menu-item flex items-center space-x-3 p-3 rounded-lg hover:bg-violet-700">
+                        <i class="fas fa-file-export"></i>
+                        <span class="menu-text">Export Data</span>
+                    </a>
+                    <a href="#" class="menu-item flex items-center space-x-3 p-3 rounded-lg hover:bg-violet-700">
+                        <i class="fas fa-bell"></i>
+                        <span class="menu-text">Alerts</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- User Profile -->
+            <div class="p-4 border-t border-violet-700 flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-violet-600 flex items-center justify-center">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="menu-text">
+                    <div class="font-medium">Admin User</div>
+                    <div class="text-xs text-violet-300">admin@example.com</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content flex-1 overflow-y-auto transition-all duration-300 w-[calc(100%-16rem)]">
+            <!-- Top Navigation -->
+            <header class="bg-white shadow-sm">
+                <div class="px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <button id="sidebar-toggle" class="md:hidden text-gray-500">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                        <h1 class="text-2xl font-bold text-gray-800">Analytics Dashboard</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button class="p-2 rounded-full hover:bg-gray-100">
+                            <i class="fas fa-bell text-gray-600"></i>
+                        </button>
+                        <button class="p-2 rounded-full hover:bg-gray-100">
+                            <i class="fas fa-question-circle text-gray-600"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Filters -->
+            <div class="bg-white shadow-sm mx-6 mt-6 p-6 rounded-lg">
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                        <input type="date" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                        <input type="date" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Service</label>
+                        <select class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500">
+                            <option>All Services</option>
+                            <option>E-commerce</option>
+                            <option>Subscription</option>
+                            <option>Digital Goods</option>
+                            <option>Physical Goods</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Partner</label>
+                        <select class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500">
+                            <option>All Partners</option>
+                            <option>Partner A</option>
+                            <option>Partner B</option>
+                            <option>Partner C</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button class="w-full bg-violet-600 text-white py-2 px-4 rounded-md hover:bg-violet-700 transition-colors">
+                            Apply Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mx-6 mt-6">
+                <div class="bg-white shadow-sm rounded-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Total Payments</p>
+                            <p class="text-2xl font-bold mt-1">1,248</p>
+                            <p class="text-sm text-green-500 mt-1">
+                                <i class="fas fa-arrow-up mr-1"></i> 12.5% from last month
+                            </p>
+                        </div>
+                        <div class="bg-violet-100 p-3 rounded-full">
+                            <i class="fas fa-credit-card text-violet-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white shadow-sm rounded-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Payment Volume</p>
+                            <p class="text-2xl font-bold mt-1">$48,724</p>
+                            <p class="text-sm text-green-500 mt-1">
+                                <i class="fas fa-arrow-up mr-1"></i> 8.3% from last month
+                            </p>
+                        </div>
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <i class="fas fa-dollar-sign text-green-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white shadow-sm rounded-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Avg. Payment</p>
+                            <p class="text-2xl font-bold mt-1">$39.04</p>
+                            <p class="text-sm text-red-500 mt-1">
+                                <i class="fas fa-arrow-down mr-1"></i> 2.1% from last month
+                            </p>
+                        </div>
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <i class="fas fa-chart-pie text-blue-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white shadow-sm rounded-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Success Rate</p>
+                            <p class="text-2xl font-bold mt-1">96.7%</p>
+                            <p class="text-sm text-green-500 mt-1">
+                                <i class="fas fa-arrow-up mr-1"></i> 1.2% from last month
+                            </p>
+                        </div>
+                        <div class="bg-yellow-100 p-3 rounded-full">
+                            <i class="fas fa-check-circle text-yellow-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mx-6 mt-6">
+                <!-- Payment Volume Chart -->
+                <div class="bg-white shadow-sm rounded-lg p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-semibold">Payment Volume</h2>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 text-sm bg-violet-100 text-violet-700 rounded-md">Daily</button>
+                            <button class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-md">Weekly</button>
+                            <button class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-md">Monthly</button>
+                        </div>
+                    </div>
+                    <canvas id="volumeChart" height="250"></canvas>
+                </div>
+                
+                <!-- Payment Methods Chart -->
+                <div class="bg-white shadow-sm rounded-lg p-6">
+                    <h2 class="text-lg font-semibold mb-4">Payments by Service</h2>
+                    <canvas id="serviceChart" height="250"></canvas>
+                </div>
+            </div>
+            
+            <!-- Additional Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mx-6 mt-6">
+                <!-- Payment Status Chart -->
+                <div class="bg-white shadow-sm rounded-lg p-6">
+                    <h2 class="text-lg font-semibold mb-4">Payment Status</h2>
+                    <canvas id="statusChart" height="250"></canvas>
+                </div>
+                
+                <!-- Partners Performance -->
+                <div class="bg-white shadow-sm rounded-lg p-6">
+                    <h2 class="text-lg font-semibold mb-4">Partners Performance</h2>
+                    <canvas id="partnerChart" height="250"></canvas>
+                </div>
+            </div>
+
+            <!-- Payments List -->
+            <div class="bg-white shadow-sm mx-6 mt-6 mb-6 rounded-lg">
+                <div class="p-6 flex justify-between items-center border-b border-gray-200">
+                    <h2 class="text-lg font-semibold">Recent Payments</h2>
+                    <button id="newPaymentBtn" class="bg-violet-600 text-white py-2 px-4 rounded-md hover:bg-violet-700 transition-colors">
+                        New Payment
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Partner</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-11-15</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">E-commerce</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Partner A</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$125.00</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="#" class="text-violet-600 hover:text-violet-900 mr-3">View</a>
+                                    <a href="#" class="text-red-600 hover:text-red-900">Delete</a>
+                                </td>
+                            </tr>
+                            <!-- More rows would be added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- New Payment Modal -->
+            <div id="newPaymentModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+                <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                    </div>
+                    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">New Payment</h3>
+                            <form>
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Service</label>
+                                    <select class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500">
+                                        <option>E-commerce</option>
+                                        <option>Subscription</option>
+                                        <option>Digital Goods</option>
+                                        <option>Physical Goods</option>
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Partner</label>
+                                    <select class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500">
+                                        <option>Partner A</option>
+                                        <option>Partner B</option>
+                                        <option>Partner C</option>
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+                                    <input type="number" step="0.01" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500">
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                    <textarea rows="3" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                            <button type="button" id="savePaymentBtn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-violet-600 text-base font-medium text-white hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                Save
+                            </button>
+                            <button type="button" id="cancelPaymentBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar on mobile
+        document.getElementById('sidebar-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // Generate random data for charts
+        function generateRandomData(count, min, max) {
+            return Array.from({length: count}, () => Math.floor(Math.random() * (max - min + 1)) + min);
+        }
+
+        // Payment Volume Chart
+        const volumeCtx = document.getElementById('volumeChart').getContext('2d');
+        const volumeChart = new Chart(volumeCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Payment Volume ($)',
+                    data: generateRandomData(12, 2000, 8000),
+                    borderColor: '#8b5cf6',
+                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Payment by Service Chart
+        const serviceCtx = document.getElementById('serviceChart').getContext('2d');
+        const serviceChart = new Chart(serviceCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['E-commerce', 'Subscription', 'Digital Goods', 'Physical Goods', 'Other'],
+                datasets: [{
+                    data: [1250, 980, 750, 420, 350],
+                    backgroundColor: [
+                        '#8b5cf6',
+                        '#10b981',
+                        '#3b82f6',
+                        '#f59e0b',
+                        '#ef4444'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+
+        // Payment Status Chart
+        const statusCtx = document.getElementById('statusChart').getContext('2d');
+        const statusChart = new Chart(statusCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Completed', 'Pending', 'Failed', 'Refunded'],
+                datasets: [{
+                    label: 'Count',
+                    data: [1208, 25, 10, 5],
+                    backgroundColor: [
+                        '#8b5cf6',
+                        '#3b82f6',
+                        '#ef4444',
+                        '#f59e0b'
+                    ],
+                    borderWidth: 0,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Partners Performance Chart

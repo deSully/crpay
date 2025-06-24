@@ -12,3 +12,9 @@ def analytics(request):
     Render the analytics page.
     """
     return render(request, 'app/analytics.html')
+
+def partners(request):
+    """
+    Render the partners page.
+    """
+    return render(request, 'app/partners.html')

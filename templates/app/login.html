@@ -173,10 +173,9 @@
                 console.log('Login attempt with:', {email, password});
                 
                 // Show success message (in a real app, you'd redirect or show based on response)
-                alert('Login successful! (This is a demo)');
-            } else {
-                // redirect to /
                 window.location.href = '/app';
+            } else {
+                alert('Please fill in all fields');
             }
         });
         

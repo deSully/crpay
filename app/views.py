@@ -116,8 +116,8 @@ def analytics(request):
 
     context = {
         "total_payments": total_payments,
-        "total_amount": total_amount + " FCFA",
-        "average_amount": average_amount + " FCFA",
+        "total_amount": total_amount,
+        "average_amount": average_amount,
         "success_rate": f"{success_rate:.1f}%",
         "total_payments_change": calc_percent_change(
             total_payments, last_month_payments

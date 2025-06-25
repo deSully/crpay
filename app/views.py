@@ -4,6 +4,8 @@ from datetime import timedelta
 from django.db.models import Sum
 from transaction.models import Transaction
 from django.core.paginator import Paginator
+from django.db.models import Avg
+from datetime import datetime
 
 
 def dashboard(request):
@@ -57,10 +59,80 @@ def dashboard(request):
 
 
 def analytics(request):
-    """
-    Render the analytics page.
-    """
-    return render(request, "app/analytics.html")
+    today = datetime.today()
+    start_month = today.replace(day=1)
+    last_month_start = (start_month - timedelta(days=1)).replace(day=1)
+    last_month_end = start_month - timedelta(days=1)
+
+    # Total de paiements ce mois (nombre)
+    total_payments = Transaction.objects.filter(created_at__gte=start_month).count()
+
+    # Volume total des paiements ce mois (somme des montants)
+    total_amount = Transaction.objects.filter(created_at__gte=start_month).aggregate(
+        total=Sum("amount")
+    )["total"]
+
+    # Somme moyenne payée ce mois
+    average_amount = Transaction.objects.filter(created_at__gte=start_month).aggregate(
+        avg=Avg("amount")
+    )["avg"]
+
+    # Taux de succès : % de transactions avec status success ce mois
+    total_tx = Transaction.objects.filter(created_at__gte=start_month).count()
+    success_tx = Transaction.objects.filter(
+        created_at__gte=start_month, status="success"
+    ).count()
+    success_rate = (success_tx / total_tx * 100) if total_tx > 0 else 0
+
+    # Calcul % d’évolution par rapport au mois dernier
+    def calc_percent_change(current, previous):
+        if previous in [None, 0]:
+            return 0
+        return round((current - previous) / previous * 100, 1)
+
+    # Valeurs mois dernier
+    last_month_payments = Transaction.objects.filter(
+        created_at__gte=last_month_start, created_at__lte=last_month_end
+    ).count()
+    last_month_amount = Transaction.objects.filter(
+        created_at__gte=last_month_start, created_at__lte=last_month_end
+    ).aggregate(total=Sum("amount"))["total"]
+    last_month_avg = Transaction.objects.filter(
+        created_at__gte=last_month_start, created_at__lte=last_month_end
+    ).aggregate(avg=Avg("amount"))["avg"]
+    last_month_success_tx = Transaction.objects.filter(
+        created_at__gte=last_month_start,
+        created_at__lte=last_month_end,
+        status="success",
+    ).count()
+    last_month_total_tx = Transaction.objects.filter(
+        created_at__gte=last_month_start, created_at__lte=last_month_end
+    ).count()
+    last_month_success_rate = (
+        (last_month_success_tx / last_month_total_tx * 100)
+        if last_month_total_tx > 0
+        else 0
+    )
+
+    context = {
+        "total_payments": f"{total_payments:,}".replace(",", " "),
+        "total_amount": total_amount + " FCFA",
+        "average_amount": average_amount + " FCFA",
+        "success_rate": f"{success_rate:.1f}%",
+        "total_payments_change": calc_percent_change(
+            total_payments, last_month_payments
+        ),
+        "total_amount_change": calc_percent_change(
+            total_amount or 0, last_month_amount or 0
+        ),
+        "average_amount_change": calc_percent_change(
+            average_amount or 0, last_month_avg or 0
+        ),
+        "success_rate_change": calc_percent_change(
+            success_rate, last_month_success_rate
+        ),
+    }
+    return render(request, "app/analytics.html", context)
 
 
 def partners(request):

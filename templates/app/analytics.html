@@ -164,7 +164,7 @@
                     </div>
                     <div class="flex items-end">
                         <button class="w-full bg-violet-600 text-white py-2 px-4 rounded-md hover:bg-violet-700 transition-colors">
-                            Apply Filters
+                            Filtrer
                         </button>
                     </div>
                 </div>
@@ -172,66 +172,67 @@
             
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mx-6 mt-6">
-                <div class="bg-white shadow-sm rounded-lg p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-500">Nombre total de paiements</p>
-                            <p class="text-2xl font-bold mt-1">1,248</p>
-                            <p class="text-sm text-green-500 mt-1">
-                                <i class="fas fa-arrow-up mr-1"></i> 12.5% par rapport au mois dernier
-                            </p>
-                        </div>
-                        <div class="bg-violet-100 p-3 rounded-full">
-                            <i class="fas fa-credit-card text-violet-600 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-white shadow-sm rounded-lg p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-500">Volume total des paiements</p>
-                            <p class="text-2xl font-bold mt-1">24 780 FCFA</p>
-                            <p class="text-sm text-green-500 mt-1">
-                                <i class="fas fa-arrow-up mr-1"></i> 8.3% par rapport au mois dernier
-                            </p>
-                        </div>
-                        <div class="bg-green-100 p-3 rounded-full">
-                            <i class="fas fa-dollar-sign text-green-600 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-white shadow-sm rounded-lg p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-500">Somme moyenne payée</p>
-                            <p class="text-2xl font-bold mt-1">3900 FCFA</p>
-                            <p class="text-sm text-red-500 mt-1">
-                                <i class="fas fa-arrow-down mr-1"></i> 2.1% par rapport au mois dernier
-                            </p>
-                        </div>
-                        <div class="bg-violet-100 p-3 rounded-full">
-                            <i class="fas fa-chart-pie text-blue-600 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-white shadow-sm rounded-lg p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-500">Taux de succès</p>
-                            <p class="text-2xl font-bold mt-1">96.7%</p>
-                            <p class="text-sm text-green-500 mt-1">
-                                <i class="fas fa-arrow-up mr-1"></i> 1.2% par rapport au mois dernier
-                            </p>
-                        </div>
-                        <div class="bg-yellow-100 p-3 rounded-full">
-                            <i class="fas fa-check-circle text-yellow-600 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
+    <div class="bg-white shadow-sm rounded-lg p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500">Nombre total de paiements</p>
+                <p class="text-2xl font-bold mt-1">{{ total_payments }}</p>
+                <p class="text-sm text-green-500 mt-1">
+                    <i class="fas fa-arrow-up mr-1"></i> {{ total_payments_change }}% par rapport au mois dernier
+                </p>
             </div>
+            <div class="bg-violet-100 p-3 rounded-full">
+                <i class="fas fa-credit-card text-violet-600 text-xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white shadow-sm rounded-lg p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500">Volume total des paiements</p>
+                <p class="text-2xl font-bold mt-1">{{ total_amount }}</p>
+                <p class="text-sm text-green-500 mt-1">
+                    <i class="fas fa-arrow-up mr-1"></i> {{ total_amount_change }}% par rapport au mois dernier
+                </p>
+            </div>
+            <div class="bg-green-100 p-3 rounded-full">
+                <i class="fas fa-dollar-sign text-green-600 text-xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white shadow-sm rounded-lg p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500">Somme moyenne payée</p>
+                <p class="text-2xl font-bold mt-1">{{ average_amount }}</p>
+                <p class="text-sm text-red-500 mt-1">
+                    <i class="fas fa-arrow-down mr-1"></i> {{ average_amount_change }}% par rapport au mois dernier
+                </p>
+            </div>
+            <div class="bg-violet-100 p-3 rounded-full">
+                <i class="fas fa-chart-pie text-blue-600 text-xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white shadow-sm rounded-lg p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500">Taux de succès</p>
+                <p class="text-2xl font-bold mt-1">{{ success_rate }}</p>
+                <p class="text-sm text-green-500 mt-1">
+                    <i class="fas fa-arrow-up mr-1"></i> {{ success_rate_change }}% par rapport au mois dernier
+                </p>
+            </div>
+            <div class="bg-yellow-100 p-3 rounded-full">
+                <i class="fas fa-check-circle text-yellow-600 text-xl"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
             
             <!-- Charts -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mx-6 mt-6">

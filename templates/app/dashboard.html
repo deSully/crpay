@@ -213,11 +213,11 @@
                     <!-- Revenue Chart -->
                     <div class="bg-white rounded-lg shadow p-6">
                         <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-lg font-semibold text-gray-800">Revenue Overview</h2>
+                            <h2 class="text-lg font-semibold text-gray-800">Evolution du volume des paiements</h2>
                             <div class="flex space-x-2">
-                                <button class="px-3 py-1 text-xs bg-violet-100 text-violet-700 rounded-full">Monthly</button>
-                                <button class="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">Weekly</button>
-                                <button class="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">Daily</button>
+                                <button class="px-3 py-1 text-xs bg-violet-100 text-violet-700 rounded-full">Mensuel</button>
+                                <button class="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">Hebdomadaire</button>
+                                <button class="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">Quotidien</button>
                             </div>
                         </div>
                         <canvas id="revenueChart" height="250"></canvas>
@@ -226,20 +226,20 @@
                     <!-- Payment Methods Chart -->
                     <div class="bg-white rounded-lg shadow p-6">
                         <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-lg font-semibold text-gray-800">Payment by Service</h2>
+                            <h2 class="text-lg font-semibold text-gray-800">Proportion des paiements par service</h2>
                             <div class="flex space-x-2">
-                                <button class="px-3 py-1 text-xs bg-violet-100 text-violet-700 rounded-full">This Month</button>
-                                <button class="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">Last Month</button>
+                                <button class="px-3 py-1 text-xs bg-violet-100 text-violet-700 rounded-full">Ce mois</button>
+                                <button class="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">Le mois dernier</button>
                             </div>
                         </div>
                         <canvas id="paymentServiceChart" height="250"></canvas>
                     </div>
                 </div>
 
-                <!-- Recent Paiements -->
+                <!-- Paiment récents -->
                 <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h2 class="text-lg font-semibold text-gray-800">Recent Paiements</h2>
+                        <h2 class="text-lg font-semibold text-gray-800">Paiment récents</h2>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
@@ -376,7 +376,7 @@
                     <div class="px-6 py-4 border-t border-gray-200">
                         <div class="flex items-center justify-between">
                             <div class="text-sm text-gray-500">
-                                Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of <span class="font-medium">1245</span> transactions
+                                Affichant <span class="font-medium">1</span> à <span class="font-medium">5</span> de <span class="font-medium">1245</span> paiements
                             </div>
                             <div class="flex space-x-2">
                                 <button class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded">Previous</button>
@@ -574,7 +574,7 @@
             }
         });
 
-        // Payment by Service Chart
+        // Proportion des paiements par service Chart
         const paymentServiceCtx = document.getElementById('paymentServiceChart').getContext('2d');
         const paymentServiceChart = new Chart(paymentServiceCtx, {
             type: 'doughnut',

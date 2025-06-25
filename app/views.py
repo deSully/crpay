@@ -80,7 +80,7 @@ def analytics(request):
     # Taux de succès : % de transactions avec status success ce mois
     total_tx = Transaction.objects.filter(created_at__gte=start_month).count()
     success_tx = Transaction.objects.filter(
-        created_at__gte=start_month, status="success"
+        created_at__gte=start_month, status="SUCCESS"
     ).count()
     success_rate = (success_tx / total_tx * 100) if total_tx > 0 else 0
 
@@ -103,7 +103,7 @@ def analytics(request):
     last_month_success_tx = Transaction.objects.filter(
         created_at__gte=last_month_start,
         created_at__lte=last_month_end,
-        status="success",
+        status="SUCCESS",
     ).count()
     last_month_total_tx = Transaction.objects.filter(
         created_at__gte=last_month_start, created_at__lte=last_month_end

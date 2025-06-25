@@ -263,10 +263,12 @@
                         <div class="flex items-center justify-between mb-4">
                             <h2 class="text-lg font-semibold text-gray-800">Proportion des paiements par service</h2>
                             <div class="flex space-x-2">
-                                <button class="px-3 py-1 text-xs bg-violet-100 text-violet-700 rounded-full">Ce
-                                    mois</button>
-                                <button class="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">Le mois
-                                    dernier</button>
+                                <button id="revPurposeThisMonthBtn" class="px-3 py-1 text-xs bg-violet-100 text-violet-700 rounded-full">
+        Ce mois
+    </button>
+    <button id="revPurposeLastMonthBtn" class="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">
+        Le mois dernier
+    </button>
                             </div>
                         </div>
                         <canvas id="paymentServiceChart" height="250"></canvas>
@@ -679,40 +681,82 @@
 
         // Proportion des paiements par service Chart
         const paymentServiceCtx = document.getElementById('paymentServiceChart').getContext('2d');
-        const paymentServiceChart = new Chart(paymentServiceCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Electricity', 'Water', 'Internet', 'Mobile', 'TV', 'Other'],
-                datasets: [{
-                    data: [25, 15, 20, 18, 12, 10],
-                    backgroundColor: [
-                        'rgba(139, 92, 246, 0.8)',
-                        'rgba(124, 58, 237, 0.8)',
-                        'rgba(109, 40, 217, 0.8)',
-                        'rgba(91, 33, 182, 0.8)',
-                        'rgba(76, 29, 149, 0.8)',
-                        'rgba(59, 7, 100, 0.8)'
-                    ],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function (context) {
-                                return `${context.label}: ${context.raw}%`;
-                            }
+    const paymentServiceChart = new Chart(paymentServiceCtx, {
+        type: 'doughnut',
+        data: {
+            labels: [],
+            datasets: [{
+                data: [],
+                backgroundColor: [
+                    'rgba(139, 92, 246, 0.8)',
+                    'rgba(124, 58, 237, 0.8)',
+                    'rgba(109, 40, 217, 0.8)',
+                    'rgba(91, 33, 182, 0.8)',
+                    'rgba(76, 29, 149, 0.8)',
+                    'rgba(59, 7, 100, 0.8)',
+                    'rgba(40, 7, 90, 0.8)',
+                    'rgba(30, 7, 80, 0.8)'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            const value = context.raw;
+                            return `${context.label}: ${value.toLocaleString()} FCFA`;
                         }
                     }
-                },
-                cutout: '70%'
+                }
+            },
+            cutout: '70%'
+        }
+    });
+
+    async function loadPurposeChartData(period = "this_month") {
+        try {
+            const response = await fetch(`/app/api/payment-purpose-data/?period=${period}`);
+            const result = await response.json();
+
+            paymentServiceChart.data.labels = result.labels;
+            paymentServiceChart.data.datasets[0].data = result.data;
+            paymentServiceChart.update();
+        } catch (error) {
+            console.error("Erreur de chargement du graphique des services :", error);
+        }
+    }
+
+    // Initial load
+    loadPurposeChartData();
+
+    // Boutons
+    document.getElementById('revPurposeThisMonthBtn').addEventListener('click', () => {
+        loadPurposeChartData("this_month");
+        togglePurposeButton("revPurposeThisMonthBtn");
+    });
+
+    document.getElementById('revPurposeLastMonthBtn').addEventListener('click', () => {
+        loadPurposeChartData("last_month");
+        togglePurposeButton("revPurposeLastMonthBtn");
+    });
+
+    function togglePurposeButton(activeId) {
+        ["revPurposeThisMonthBtn", "revPurposeLastMonthBtn"].forEach(id => {
+            const btn = document.getElementById(id);
+            if (btn) {
+                btn.classList.toggle("bg-violet-100", id === activeId);
+                btn.classList.toggle("text-violet-700", id === activeId);
+                btn.classList.toggle("bg-gray-100", id !== activeId);
+                btn.classList.toggle("text-gray-700", id !== activeId);
             }
         });
+    }
 
         const dropdownBtn = document.getElementById('userDropdownBtn');
         const dropdownMenu = document.getElementById('userDropdownMenu');

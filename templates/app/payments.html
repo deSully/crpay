@@ -205,13 +205,13 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded-full"
-                                                    src="{% if trx.details.user_avatar %}{{ trx.details.user_avatar }}{% else %}https://via.placeholder.com/40/cccccc/ffffff?text=User{% endif %}"
-                                                    alt="User Avatar">
+                                               <img class="h-10 w-10 rounded-full" 
+                                                src="{{ transaction.details.customer_avatar_url|default:'https://www.gravatar.com/avatar/?d=mp&s=40' }}" 
+                                                alt="{{ transaction.details.customer_name|default:'Customer' }}">
                                             </div>
                                             <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">{{trx.details.user_name|default:"Utilisateur" }}</div>
-                                                <div class="text-sm text-gray-500">{{trx.details.user_email|default:"email@example.com" }}</div>
+                                                <div class="text-sm font-medium text-gray-900">{{ transaction.details.customer_name|default:"N/A" }}</div>
+                                                <div class="text-sm text-gray-500">{{ transaction.details.customer_email|default:"" }}</div>
                                             </div>
                                         </div>
                                     </td>

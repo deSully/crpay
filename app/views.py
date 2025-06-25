@@ -48,6 +48,10 @@ def dashboard(request):
         "monthly_tx_growth": monthly_tx_growth,
         "last_update": now(),
     }
+
+    latest_transactions = Transaction.objects.order_by('-created_at')[:5]
+    context["latest_transactions"] = latest_transactions
+
     return render(request, "app/dashboard.html", context)
 
 

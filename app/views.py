@@ -3,6 +3,7 @@ from django.utils.timezone import now
 from datetime import timedelta
 from django.db.models import Sum
 from transaction.models import Transaction
+from django.core.paginator import Paginator
 
 
 def dashboard(request):
@@ -49,7 +50,7 @@ def dashboard(request):
         "last_update": now(),
     }
 
-    latest_transactions = Transaction.objects.order_by('-created_at')[:5]
+    latest_transactions = Transaction.objects.order_by("-created_at")[:5]
     context["latest_transactions"] = latest_transactions
 
     return render(request, "app/dashboard.html", context)
@@ -70,10 +71,16 @@ def partners(request):
 
 
 def payments(request):
-    """
-    Render the payments page.
-    """
-    return render(request, "app/payments.html")
+    transactions = Transaction.objects.select_related("entity").order_by("-created_at")
+    paginator = Paginator(transactions, 10)  # 10 transactions par page
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "page_obj": page_obj,
+    }
+    return render(request, "app/payments.html", context)
 
 
 def login(request):

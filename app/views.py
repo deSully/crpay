@@ -36,3 +36,9 @@ def password_reset(request):
     Render the password reset page.
     """
     return render(request, 'app/password_reset.html')
+
+def logout(request):
+    """
+    Render the logout page.
+    """
+    return render(request, 'app/logout.html')

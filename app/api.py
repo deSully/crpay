@@ -72,7 +72,7 @@ def payment_purpose_data_api(request):
         .order_by('-total')
     )
 
-    labels = [entry['purpose'] or "Autre"] for entry in data]
+    labels = [entry['purpose'] or "Autre" for entry in data]
     values = [float(entry['total']) for entry in data]
 
     return JsonResponse({

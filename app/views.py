@@ -115,7 +115,7 @@ def analytics(request):
     )
 
     context = {
-        "total_payments": f"{total_payments:,}".replace(",", " "),
+        "total_payments": total_payments,
         "total_amount": total_amount + " FCFA",
         "average_amount": average_amount + " FCFA",
         "success_rate": f"{success_rate:.1f}%",

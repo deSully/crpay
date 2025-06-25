@@ -267,8 +267,7 @@
                                 <span class="px-3 py-1 text-sm bg-violet-600 text-white rounded">{{ num }}</span>
                                 {% elif num >= page_obj.number|add:-2 and num <= page_obj.number|add:2 %} <a
                                     href="?page={{ num }}"
-                                    class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200">{{ num
-                                    }}</a>
+                                    class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200">{{ num }}</a>
                                     {% endif %}
                                     {% endfor %}
 

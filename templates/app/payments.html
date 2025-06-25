@@ -211,17 +211,13 @@
                                                     alt="User Avatar">
                                             </div>
                                             <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">{{
-                                                    trx.details.user_name|default:"Utilisateur" }}</div>
-                                                <div class="text-sm text-gray-500">{{
-                                                    trx.details.user_email|default:"email@example.com" }}</div>
+                                                <div class="text-sm font-medium text-gray-900">{{trx.details.user_name|default:"Utilisateur" }}</div>
+                                                <div class="text-sm text-gray-500">{{trx.details.user_email|default:"email@example.com" }}</div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{
-                                        trx.purpose|default:"N/A" }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{
-                                        trx.amount|floatformat:0 }} CFA</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{trx.purpose|default:"N/A" }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{trx.amount|floatformat:0 }} CFA</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         {% if trx.status == "SUCCESS" %}
                                         <span

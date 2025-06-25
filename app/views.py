@@ -4,7 +4,6 @@ from datetime import timedelta
 from django.db.models import Sum
 from transaction.models import Transaction
 from django.core.paginator import Paginator
-from .utils import format_amount  # Assurez-vous d'avoir cette fonction utilitaire
 
 
 def dashboard(request):
@@ -42,7 +41,7 @@ def dashboard(request):
     )
 
     context = {
-        "total_monthly_amount": format_amount(total_monthly_amount),
+        "total_monthly_amount": total_monthly_amount,
         "total_monthly_count": total_monthly_count,
         "daily_amount": daily_amount,
         "daily_count": daily_count,

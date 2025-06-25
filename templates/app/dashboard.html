@@ -174,21 +174,25 @@
             <main class="p-6">
                 <!-- Summary Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <!-- Volume total mensuel des paiements -->
                     <div class="bg-white rounded-lg shadow p-6">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-violet-100 text-violet-600">
                                 <i class="fas fa-money-bill-wave text-xl"></i>
                             </div>
                             <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-500">Volume total mesuel des paiements</p>
-                                <p class="text-2xl font-semibold text-gray-800">24 780 FCFA</p>
+                                <p class="text-sm font-medium text-gray-500">Volume total mensuel des paiements</p>
+                                <p class="text-2xl font-semibold text-gray-800">{{ total_monthly_amount|intcomma }} FCFA
+                                </p>
                             </div>
                         </div>
                         <div class="mt-4">
-                            <span class="text-green-500 text-sm font-medium">+12.5%</span>
+                            <span class="text-green-500 text-sm font-medium">+{{ monthly_growth }}%</span>
                             <span class="text-gray-500 text-sm ml-2">vs le mois passé</span>
                         </div>
                     </div>
+
+                    <!-- Nombre total mensuel de paiements -->
                     <div class="bg-white rounded-lg shadow p-6">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-violet-100 text-violet-600">
@@ -196,28 +200,32 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-500">Nombre total mensuel de paiements</p>
-                                <p class="text-2xl font-semibold text-gray-800">1,245</p>
+                                <p class="text-2xl font-semibold text-gray-800">{{ total_monthly_count|intcomma }}</p>
                             </div>
                         </div>
                         <div class="mt-4">
-                            <span class="text-green-500 text-sm font-medium">+8.2%</span>
+                            <span class="text-green-500 text-sm font-medium">+{{ monthly_tx_growth }}%</span>
                             <span class="text-gray-500 text-sm ml-2">vs le mois passé</span>
                         </div>
                     </div>
+
+                    <!-- Volume total des paiements aujourd’hui -->
                     <div class="bg-white rounded-lg shadow p-6">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-violet-100 text-violet-600">
                                 <i class="fas fa-money-bill-wave text-xl"></i>
                             </div>
                             <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-500">Volume total de paiments ce jour</p>
-                                <p class="text-2xl font-semibold text-gray-800">48</p>
+                                <p class="text-sm font-medium text-gray-500">Volume total de paiements ce jour</p>
+                                <p class="text-2xl font-semibold text-gray-800">{{ daily_amount|intcomma }} FCFA</p>
                             </div>
                         </div>
                         <div class="mt-4">
-                            <span class="text-gray-500 text-sm ml-2">Dernière MAJ le : </span>
+                            <span class="text-gray-500 text-sm ml-2">Dernière MAJ le : {{ last_update|date:"d/m/Y à H:i"}}</span>
                         </div>
                     </div>
+
+                    <!-- Nombre total des paiements aujourd’hui -->
                     <div class="bg-white rounded-lg shadow p-6">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-violet-100 text-violet-600">
@@ -225,14 +233,15 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-500">Nombre total de paiements ce jour</p>
-                                <p class="text-2xl font-semibold text-gray-800">22</p>
+                                <p class="text-2xl font-semibold text-gray-800">{{ daily_count }}</p>
                             </div>
                         </div>
                         <div class="mt-4">
-                            <span class="text-gray-500 text-sm ml-2">Dernière MAJ le : </span>
+                            <span class="text-gray-500 text-sm ml-2">Dernière MAJ le : {{ last_update|date:"d/m/Y à H:i"}}</span>
                         </div>
                     </div>
                 </div>
+
 
                 <!-- Charts Row -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
@@ -444,9 +453,11 @@
                         <div class="divide-y divide-gray-200">
                             <div class="px-6 py-4">
                                 <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10 bg-violet-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">
-    {{ request.user.first_name|default_if_none:"" |slice:":1" }}{{ request.user.last_name|default_if_none:"" |slice:":1" }}
-</div>
+                                    <div
+                                        class="flex-shrink-0 h-10 w-10 bg-violet-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">
+                                        {{ request.user.first_name|default_if_none:"" |slice:":1" }}{{
+                                        request.user.last_name|default_if_none:"" |slice:":1" }}
+                                    </div>
                                     <div class="ml-4">
                                         <div class="text-sm font-medium text-gray-900">Jessica Thompson</div>
                                         <div class="text-sm text-gray-500">45 transactions</div>

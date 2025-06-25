@@ -640,7 +640,7 @@
 
         async function loadChartData(period = "this_month") {
             try {
-                const response = await fetch(`/api/transactions-data/?period=${period}`);
+                const response = await fetch(`/app/api/transactions-data/?period=${period}`);
                 const result = await response.json();
 
                 revenueChart.data.labels = result.labels;

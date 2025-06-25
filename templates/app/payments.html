@@ -201,8 +201,7 @@
                             <tbody class="bg-white divide-y divide-gray-200">
                                 {% for trx in page_obj %}
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{{
-                                        trx.reference }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{{trx.reference }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">
@@ -230,8 +229,7 @@
                                             class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Failed</span>
                                         {% endif %}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{
-                                        trx.created_at|date:"M d, Y" }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{rx.created_at|date:"M d, Y" }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <a href="#"
                                             class="text-violet-600 hover:text-violet-900">View</a>

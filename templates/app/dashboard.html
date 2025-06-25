@@ -100,15 +100,26 @@
                     <i class="fas fa-users"></i>
                     <span class="nav-text ml-3">Customers</span>
                 </a>
-                <div class="absolute bottom-0 w-full p-4">
-                    <div class="flex items-center">
-                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" class="w-10 h-10 rounded-full">
-                        <div class="nav-text ml-3">
-                            <div class="font-medium">Admin User</div>
-                            <div class="text-xs text-violet-200">Super Admin</div>
-                        </div>
-                    </div>
-                </div>
+               <div class="absolute bottom-0 w-full p-4">
+    <div class="relative group">
+        <button class="flex items-center w-full focus:outline-none">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" class="w-10 h-10 rounded-full">
+            <div class="nav-text ml-3 text-left">
+                <div class="font-medium">Admin User</div>
+                <div class="text-xs text-violet-200">Super Admin</div>
+            </div>
+            <i class="fas fa-caret-down ml-auto text-sm"></i>
+        </button>
+
+        <!-- Dropdown -->
+        <div class="absolute left-0 mt-2 w-full bg-white text-gray-700 rounded shadow-md z-10 hidden group-hover:block">
+            <a href="{% url 'logout' %}" class="block px-4 py-2 hover:bg-gray-100 text-sm">
+                <i class="fas fa-sign-out-alt mr-2"></i> Déconnexion
+            </a>
+        </div>
+    </div>
+</div>
+
             </nav>
         </div>
 

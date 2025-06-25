@@ -2,6 +2,7 @@ from django.urls import path
 
 
 from .views import dashboard, analytics, partners, payments, login, password_reset
+from .api import transaction_data_api
 
 urlpatterns = [
     path("", dashboard, name="dashboard"),
@@ -12,4 +13,6 @@ urlpatterns = [
     path("login/", login, name="login"),
     path("password_reset/", password_reset, name="password_reset"),
     path("logout/", login, name="logout"),
+
+    path("api/transactions-data/", transaction_data_api, name="transactions_data_api"),
 ]

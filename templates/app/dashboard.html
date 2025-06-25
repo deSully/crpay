@@ -250,12 +250,9 @@
                         <div class="flex items-center justify-between mb-4">
                             <h2 class="text-lg font-semibold text-gray-800">Evolution du volume des paiements</h2>
                             <div class="flex space-x-2">
-                                <button
-                                    class="px-3 py-1 text-xs bg-violet-100 text-violet-700 rounded-full">Mensuel</button>
-                                <button
-                                    class="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">Hebdomadaire</button>
-                                <button
-                                    class="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">Quotidien</button>
+                                <button id="revThisMonthBtn" class="px-3 py-1 text-xs bg-violet-100 text-violet-700 rounded-full">Ce mois</button>
+                                <button id="revLastMonthBtn" class="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">Le mois dernier</button>
+    
                             </div>
                         </div>
                         <canvas id="revenueChart" height="250"></canvas>
@@ -609,13 +606,14 @@
 
         // Revenue Chart
         const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+
         const revenueChart = new Chart(revenueCtx, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                labels: [],
                 datasets: [{
-                    label: 'Revenue',
-                    data: [12500, 19000, 15000, 20000, 24780, 22000, 24000],
+                    label: 'Montant des paiements',
+                    data: [],
                     backgroundColor: 'rgba(139, 92, 246, 0.1)',
                     borderColor: 'rgba(139, 92, 246, 1)',
                     borderWidth: 2,
@@ -626,25 +624,58 @@
             options: {
                 responsive: true,
                 plugins: {
-                    legend: {
-                        display: false
-                    }
+                    legend: { display: false }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: {
-                            drawBorder: false
-                        }
+                        grid: { drawBorder: false }
                     },
                     x: {
-                        grid: {
-                            display: false
-                        }
+                        grid: { display: false }
                     }
                 }
             }
         });
+
+        async function loadChartData(period = "this_month") {
+            try {
+                const response = await fetch(`/api/transactions-data/?period=${period}`);
+                const result = await response.json();
+
+                revenueChart.data.labels = result.labels;
+                revenueChart.data.datasets[0].data = result.data;
+                revenueChart.update();
+            } catch (error) {
+                console.error("Erreur de chargement des données :", error);
+            }
+        }
+
+        // Initial load
+        loadChartData();
+
+        // Boutons
+        document.getElementById('revThisMonthBtn').addEventListener('click', () => {
+            loadChartData("this_month");
+            toggleActiveButton("revThisMonthBtn");
+        });
+
+        document.getElementById('revLastMonthBtn').addEventListener('click', () => {
+            loadChartData("last_month");
+            toggleActiveButton("revLastMonthBtn");
+        });
+
+        function toggleActiveButton(activeId) {
+            ["revThisMonthBtn", "revLastMonthBtn"].forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) {
+                    btn.classList.toggle("bg-violet-100", id === activeId);
+                    btn.classList.toggle("text-violet-700", id === activeId);
+                    btn.classList.toggle("bg-gray-100", id !== activeId);
+                    btn.classList.toggle("text-gray-700", id !== activeId);
+                }
+            });
+        }
 
         // Proportion des paiements par service Chart
         const paymentServiceCtx = document.getElementById('paymentServiceChart').getContext('2d');

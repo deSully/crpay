@@ -91,10 +91,12 @@
                     <span class="nav-text ml-3">Analytics</span>
                 </a>
                 <div class="px-4 py-2 text-violet-200 uppercase text-xs font-bold">Management</div>
+                {% if request.user.is_staff or request.user.is_superuser %}
                 <a href="{% url 'partners' %}" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
                     <i class="fas fa-handshake"></i>
                     <span class="nav-text ml-3">Partenaires et Agents</span>
                 </a>
+                {% endif %}
                 <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
                     <i class="fas fa-users"></i>
                     <span class="nav-text ml-3">Customers</span>
@@ -134,40 +136,43 @@
             
             <!-- Filters -->
             <div class="bg-white shadow-sm mx-6 mt-6 p-6 rounded-lg">
+                <form method="GET" action="{% url 'analytics' %}">
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Date début</label>
-                        <input type="date" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500">
+                        <input type="date" name="start_date" value="{{ selected_start_date }}" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Date fin</label>
-                        <input type="date" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500">
+                        <input type="date" name="end_date" value="{{ selected_end_date }}" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Service</label>
-                        <select class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500">
-                            <option>All Services</option>
-                            <option>E-commerce</option>
-                            <option>Subscription</option>
-                            <option>Digital Goods</option>
-                            <option>Physical Goods</option>
+                        <select name="service" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500">
+                            <option value="">Tous les services</option>
+                            {% for service in services %}
+                            <option value="{{ service }}" {% if service == selected_service %}selected{% endif %}>{{ service }}</option>
+                            {% endfor %}
                         </select>
                     </div>
+                    {% if request.user.is_staff or request.user.is_superuser %}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Partenaires</label>
-                        <select class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500">
-                            <option>Tous les partenaires</option>
-                            <option>Partner A</option>
-                            <option>Partner B</option>
-                            <option>Partner C</option>
+                        <select name="entity" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500">
+                            <option value="">Tous les partenaires</option>
+                            {% for entity in entities %}
+                            <option value="{{ entity.id }}" {% if entity.id|stringformat:"s" == selected_entity %}selected{% endif %}>{{ entity.name }} ({{ entity.get_entity_type_display }})</option>
+                            {% endfor %}
                         </select>
                     </div>
+                    {% endif %}
                     <div class="flex items-end">
-                        <button class="w-full bg-violet-600 text-white py-2 px-4 rounded-md hover:bg-violet-700 transition-colors">
+                        <button type="submit" class="w-full bg-violet-600 text-white py-2 px-4 rounded-md hover:bg-violet-700 transition-colors">
                             Filtrer
                         </button>
                     </div>
                 </div>
+                </form>
             </div>
             
             <!-- Stats Cards -->
@@ -176,9 +181,9 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm font-medium text-gray-500">Nombre total de paiements</p>
-                <p class="text-2xl font-bold mt-1">{{ total_payments }}</p>
+                <p class="text-2xl font-bold mt-1">{{ total_payments|default:0 }}</p>
                 <p class="text-sm text-green-500 mt-1">
-                    <i class="fas fa-arrow-up mr-1"></i> {{ total_payments_change }}% par rapport au mois dernier
+                    <i class="fas fa-arrow-up mr-1"></i> {{ total_payments_change|default:0 }}% par rapport au mois dernier
                 </p>
             </div>
             <div class="bg-violet-100 p-3 rounded-full">
@@ -191,13 +196,13 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm font-medium text-gray-500">Volume total des paiements</p>
-                <p class="text-2xl font-bold mt-1">{{ total_amount }}</p>
+                <p class="text-2xl font-bold mt-1">{{ total_amount|default:0|floatformat:0 }} GNF</p>
                 <p class="text-sm text-green-500 mt-1">
-                    <i class="fas fa-arrow-up mr-1"></i> {{ total_amount_change }}% par rapport au mois dernier
+                    <i class="fas fa-arrow-up mr-1"></i> {{ total_amount_change|default:0 }}% par rapport au mois dernier
                 </p>
             </div>
             <div class="bg-green-100 p-3 rounded-full">
-                <i class="fas fa-dollar-sign text-green-600 text-xl"></i>
+                <i class="fas fa-coins text-green-600 text-xl"></i>
             </div>
         </div>
     </div>
@@ -206,9 +211,9 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm font-medium text-gray-500">Somme moyenne payée</p>
-                <p class="text-2xl font-bold mt-1">{{ average_amount }}</p>
+                <p class="text-2xl font-bold mt-1">{{ average_amount|default:0|floatformat:0 }} GNF</p>
                 <p class="text-sm text-red-500 mt-1">
-                    <i class="fas fa-arrow-down mr-1"></i> {{ average_amount_change }}% par rapport au mois dernier
+                    <i class="fas fa-arrow-down mr-1"></i> {{ average_amount_change|default:0 }}% par rapport au mois dernier
                 </p>
             </div>
             <div class="bg-violet-100 p-3 rounded-full">
@@ -234,166 +239,18 @@
 </div>
 
             
-            <!-- Charts -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mx-6 mt-6">
-                <!-- Payment Volume Chart -->
-                <div class="bg-white shadow-sm rounded-lg p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-lg font-semibold">Volume de transactions effectué</h2>
-                        <div class="flex space-x-2">
-                            <button class="px-3 py-1 text-sm bg-violet-100 text-violet-700 rounded-md">Quotidien</button>
-                            <button class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-md">Hebdomadaire</button>
-                            <button class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-md">Mensuel</button>
-                        </div>
-                    </div>
-                    <canvas id="volumeChart" height="250"></canvas>
-                </div>
-                
-                <!-- Payment Methods Chart -->
-                <div class="bg-white shadow-sm rounded-lg p-6">
-                    <h2 class="text-lg font-semibold mb-4">Paiements effectués par service</h2>
-                    <canvas id="serviceChart" height="250"></canvas>
-                </div>
-            </div>
-            
-            <!-- Additional Charts -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mx-6 mt-6">
-                <!-- Payment Status Chart -->
-                <div class="bg-white shadow-sm rounded-lg p-6">
-                    <h2 class="text-lg font-semibold mb-4">Statut des paiements</h2>
-                    <canvas id="statusChart" height="250"></canvas>
-                </div>
-                
-                <!-- Partners Performance -->
-                <div class="bg-white shadow-sm rounded-lg p-6">
-                    <h2 class="text-lg font-semibold mb-4">Obervabilité des partenaires</h2>
-                    <canvas id="partnerChart" height="250"></canvas>
-                </div>
-            </div>
-
-            
         </div>
     </div>
 
     <script>
         // Toggle sidebar on mobile
-        document.getElementById('sidebar-toggle').addEventListener('click', function() {
-            document.querySelector('.sidebar').classList.toggle('active');
-        });
-
-        // Generate random data for charts
-        function generateRandomData(count, min, max) {
-            return Array.from({length: count}, () => Math.floor(Math.random() * (max - min + 1)) + min);
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('active');
+            });
         }
+    </script>
 
-        // Payment Volume Chart
-        const volumeCtx = document.getElementById('volumeChart').getContext('2d');
-        const volumeChart = new Chart(volumeCtx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [{
-                    label: 'Payment Volume ($)',
-                    data: generateRandomData(12, 2000, 8000),
-                    borderColor: '#8b5cf6',
-                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            drawBorder: false
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        }
-                    }
-                }
-            }
-        });
-
-        // Proportion des paiements par service Chart
-        const serviceCtx = document.getElementById('serviceChart').getContext('2d');
-        const serviceChart = new Chart(serviceCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['E-commerce', 'Subscription', 'Digital Goods', 'Physical Goods', 'Other'],
-                datasets: [{
-                    data: [1250, 980, 750, 420, 350],
-                    backgroundColor: [
-                        '#8b5cf6',
-                        '#10b981',
-                        '#3b82f6',
-                        '#f59e0b',
-                        '#ef4444'
-                    ],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                    }
-                },
-                cutout: '70%'
-            }
-        });
-
-        // Payment Status Chart
-        const statusCtx = document.getElementById('statusChart').getContext('2d');
-        const statusChart = new Chart(statusCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Completed', 'Pending', 'Failed', 'Refunded'],
-                datasets: [{
-                    label: 'Count',
-                    data: [1208, 25, 10, 5],
-                    backgroundColor: [
-                        '#8b5cf6',
-                        '#3b82f6',
-                        '#ef4444',
-                        '#f59e0b'
-                    ],
-                    borderWidth: 0,
-                    borderRadius: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            drawBorder: false
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        }
-                    }
-                }
-            }
-        });
-
-        // Partners Performance Chart
+</body>
+</html>

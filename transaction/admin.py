@@ -255,7 +255,7 @@ class TransactionAdmin(admin.ModelAdmin):
             total_amount_paid=f"{total_amount_paid:.2f}",
             avg_amount_paid=f"{avg_amount_paid:.2f}",
             total_today=f"{total_today:.2f}",
-            currency="XOF",  # adapte ta monnaie ici si besoin
+            currency="GNF",  # adapte ta monnaie ici si besoin
             title="",
             start_date=start_date.strftime("%Y-%m-%d"),
             end_date=end_date.strftime("%Y-%m-%d"),
@@ -368,25 +368,26 @@ class PaymentProviderLogAdmin(admin.ModelAdmin):
 
     def is_interne(self, request):
         return (
-            hasattr(request.user, "entity_type")
+            hasattr(request.user, "entity")
             and request.user.entity.entity_type == "INTERNAL"
         )
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        if self.is_interne(request):
+        # Vérifier si l'utilisateur est INTERNAL ou superuser
+        if request.user.is_superuser or self.is_interne(request):
             return qs
-        return qs.none()  # retournera une page vide
+        return qs.none()  # retournera une page vide pour les autres
 
     def has_view_permission(self, request, obj=None):
-        return self.is_interne(request)
+        return request.user.is_superuser or self.is_interne(request)
 
     def transaction_reference(self, obj):
         return obj.transaction.reference
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
-        extra_context["title"] = "Liste des transactions InTouch"
+        extra_context["title"] = "Liste des logs des fournisseurs de paiement"
         return super().changelist_view(request, extra_context=extra_context)
 
     @admin.action(description="Relancer l'envoi à InTouch")

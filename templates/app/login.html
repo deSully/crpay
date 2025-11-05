@@ -73,6 +73,7 @@
         <!-- Recovery Form -->
         <div class="p-8">
             <form id="loginForm">
+                {% csrf_token %}
                 <!-- Email Field -->
                 <div class="mb-6">
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
@@ -136,21 +137,58 @@
 
     <script>
         // Login form handling
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const remember = document.getElementById('remember').checked;
+            const submitButton = e.target.querySelector('button[type="submit"]');
             
-            if(email && password) {
-                // Here you would typically send the login request to your backend
-                console.log('Login attempt:', {email, password, remember});
+            if(!email || !password) {
+                alert('Veuillez remplir tous les champs');
+                return;
+            }
+            
+            // Disable button and show loading state
+            submitButton.disabled = true;
+            const originalText = submitButton.textContent;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Connexion...';
+            
+            try {
+                // Get CSRF token from cookies
+                const csrftoken = document.cookie.split('; ')
+                    .find(row => row.startsWith('csrftoken='))
+                    ?.split('=')[1];
                 
-                // Redirect to dashboard or handle response
-                // window.location.href = '/dashboard';
-            } else {
-                alert('Please fill in all fields');
+                const response = await fetch('/app/login/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify({
+                        username: email,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if(response.ok) {
+                    // Redirect to dashboard
+                    window.location.href = data.redirect || '/app/';
+                } else {
+                    // Show error message
+                    alert(data.error || 'Identifiants invalides');
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalText;
+                }
+            } catch(error) {
+                console.error('Login error:', error);
+                alert('Erreur de connexion. Veuillez réessayer.');
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalText;
             }
         });
     </script>

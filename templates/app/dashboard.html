@@ -1,3 +1,4 @@
+{% load tz %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -102,10 +103,12 @@
                     <span class="nav-text ml-3">Analytics</span>
                 </a>
                 <div class="px-4 py-2 text-violet-200 uppercase text-xs font-bold">Management</div>
+                {% if request.user.is_staff or request.user.is_superuser %}
                 <a href="{% url 'partners' %}" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
                     <i class="fas fa-handshake"></i>
                     <span class="nav-text ml-3">Partenaires et Agents</span>
                 </a>
+                {% endif %}
                 <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
                     <i class="fas fa-users"></i>
                     <span class="nav-text ml-3">Customers</span>
@@ -125,7 +128,7 @@
                         <!-- Menu dropdown qui monte -->
                         <div id="userDropdownMenu"
                             class="absolute bottom-14 left-0 w-full bg-white text-gray-700 rounded shadow-md z-10 hidden">
-                            <a href="{% url 'logout' %}" class="block px-4 py-2 hover:bg-gray-100 text-sm">
+                            <a href="{% url 'app-logout' %}" class="block px-4 py-2 hover:bg-gray-100 text-sm">
                                 <i class="fas fa-sign-out-alt mr-2"></i> Déconnexion
                             </a>
                         </div>
@@ -182,7 +185,7 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-500">Volume total mensuel des paiements</p>
-                                <p class="text-2xl font-semibold text-gray-800">{{ total_monthly_amount }} FCFA
+                                <p class="text-2xl font-semibold text-gray-800">{{ total_monthly_amount }} GNF
                                 </p>
                             </div>
                         </div>
@@ -217,7 +220,7 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-500">Volume total de paiements ce jour</p>
-                                <p class="text-2xl font-semibold text-gray-800">{{ daily_amount }} FCFA</p>
+                                <p class="text-2xl font-semibold text-gray-800">{{ daily_amount }} GNF</p>
                             </div>
                         </div>
                         <div class="mt-4">
@@ -308,6 +311,12 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
+  <!-- DEBUG: Nombre de transactions = {{ latest_transactions|length }} -->
+  {% if not latest_transactions %}
+  <tr>
+    <td colspan="7" class="px-6 py-4 text-center text-gray-500">Aucune transaction récente</td>
+  </tr>
+  {% endif %}
   {% for transaction in latest_transactions %}
   <tr>
     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ transaction.reference }}</td>
@@ -325,7 +334,7 @@
       </div>
     </td>
     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ transaction.purpose|default:"N/A" }}</td>
-    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ transaction.amount }} FCFA</td>
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ transaction.amount }} GNF</td>
     <td class="px-6 py-4 whitespace-nowrap">
       <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
         {% if transaction.status == 'SUCCESS' %}
@@ -341,7 +350,10 @@
         {{ transaction.get_status_display }}
       </span>
     </td>
-    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ transaction.created_at|date:"M d, Y" }}</td>
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+      <div>{{ transaction.created_at|date:"d/m/Y" }}</div>
+      <div class="text-xs text-gray-400">{{ transaction.created_at|date:"H:i" }}</div>
+    </td>
     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
       <a href="#" class="text-violet-600 hover:text-violet-900">View</a>
     </td>
@@ -353,7 +365,8 @@
                     </div>
                 </div>
 
-                <!-- Top Agents -->
+                <!-- Top Agents et Top Partenaires - Visible uniquement pour staff/superuser -->
+                {% if request.user.is_staff or request.user.is_superuser %}
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="bg-white rounded-lg shadow overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-200">
@@ -373,7 +386,7 @@
                                     </div>
                                     <div class="ml-auto">
                                         <span
-                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-violet-100 text-violet-800">$5,420</span>
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-violet-100 text-violet-800">5,420 GNF</span>
                                     </div>
                                 </div>
                             </div>
@@ -389,7 +402,7 @@
                                     </div>
                                     <div class="ml-auto">
                                         <span
-                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-violet-100 text-violet-800">$4,560</span>
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-violet-100 text-violet-800">4,560 GNF</span>
                                     </div>
                                 </div>
                             </div>
@@ -405,7 +418,7 @@
                                     </div>
                                     <div class="ml-auto">
                                         <span
-                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-violet-100 text-violet-800">$3,890</span>
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-violet-100 text-violet-800">3,890 GNF</span>
                                     </div>
                                 </div>
                             </div>
@@ -421,7 +434,7 @@
                                     </div>
                                     <div class="ml-auto">
                                         <span
-                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-violet-100 text-violet-800">$3,420</span>
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-violet-100 text-violet-800">3,420 GNF</span>
                                     </div>
                                 </div>
                             </div>
@@ -446,7 +459,7 @@
                                     </div>
                                     <div class="ml-auto">
                                         <span
-                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-violet-100 text-violet-800">$12,450</span>
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-violet-100 text-violet-800">12,450 GNF</span>
                                     </div>
                                 </div>
                             </div>
@@ -462,7 +475,7 @@
                                     </div>
                                     <div class="ml-auto">
                                         <span
-                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-violet-100 text-violet-800">$9,870</span>
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-violet-100 text-violet-800">9,870 GNF</span>
                                     </div>
                                 </div>
                             </div>
@@ -478,7 +491,7 @@
                                     </div>
                                     <div class="ml-auto">
                                         <span
-                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-violet-100 text-violet-800">$7,650</span>
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-violet-100 text-violet-800">7,650 GNF</span>
                                     </div>
                                 </div>
                             </div>
@@ -494,13 +507,14 @@
                                     </div>
                                     <div class="ml-auto">
                                         <span
-                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-violet-100 text-violet-800">$5,320</span>
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-violet-100 text-violet-800">5,320 GNF</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                {% endif %}
             </main>
         </div>
     </div>
@@ -620,7 +634,7 @@
                     callbacks: {
                         label: function (context) {
                             const value = context.raw;
-                            return `${context.label}: ${value.toLocaleString()} FCFA`;
+                            return `${context.label}: ${value.toLocaleString()} GNF`;
                         }
                     }
                 }

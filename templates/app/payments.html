@@ -102,10 +102,12 @@
                     <span class="nav-text ml-3">Analytics</span>
                 </a>
                 <div class="px-4 py-2 text-violet-200 uppercase text-xs font-bold">Management</div>
+                {% if request.user.is_staff or request.user.is_superuser %}
                 <a href="{% url 'partners' %}" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
                     <i class="fas fa-handshake"></i>
                     <span class="nav-text ml-3">Partenaires et Agents</span>
                 </a>
+                {% endif %}
                 <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-violet-700">
                     <i class="fas fa-users"></i>
                     <span class="nav-text ml-3">Customers</span>
@@ -186,7 +188,7 @@
                                         Service</th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Amount (CFA)</th>
+                                        Amount (GNF)</th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Status</th>
@@ -216,7 +218,7 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{trx.purpose|default:"N/A" }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{trx.amount|floatformat:0 }} CFA</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{trx.amount|floatformat:0 }} GNF</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         {% if trx.status == "SUCCESS" %}
                                         <span
@@ -229,7 +231,10 @@
                                             class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Failed</span>
                                         {% endif %}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{rx.created_at|date:"M d, Y" }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <div>{{trx.created_at|date:"d/m/Y" }}</div>
+                                        <div class="text-xs text-gray-400">{{trx.created_at|date:"H:i" }}</div>
+                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <a href="#"
                                             class="text-violet-600 hover:text-violet-900">View</a>

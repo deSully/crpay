@@ -185,11 +185,11 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(
-        minutes=15
-    ),  # Durée de validité du token d'accès
+        hours=2
+    ),  # Durée de validité du token d'accès (2 heures pour dev)
     "REFRESH_TOKEN_LIFETIME": timedelta(
-        days=1
-    ),  # Durée de validité du token de rafraîchissement
+        days=7
+    ),  # Durée de validité du token de rafraîchissement (7 jours)
     "ROTATE_REFRESH_TOKENS": True,  # Renouvelle les tokens de rafraîchissement à chaque utilisation
     "BLACKLIST_AFTER_ROTATION": True,  # Permet de blacklister les anciens tokens
 }
@@ -204,7 +204,7 @@ SWAGGER_SETTINGS = {
             'type': 'apiKey',
             'name': 'Authorization',
             'in': 'header',
-            'description': 'Authentification JWT. Format: "Bearer {votre_token}"'
+            'description': '⚠️ IMPORTANT: Entrez "Bearer votre_token" (avec le mot Bearer et un espace). Exemple: Bearer eyJ0eXAiOiJKV1Qi...',
         }
     },
     'USE_SESSION_AUTH': False,

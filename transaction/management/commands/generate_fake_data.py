@@ -126,7 +126,7 @@ class Command(BaseCommand):
                     "sender_phone": f"+226{random.randint(10000000, 99999999)}",
                     "receiver_phone": f"+226{random.randint(10000000, 99999999)}",
                     "payment_method": random.choice(["ORANGE_MONEY", "WAVE", "CORIS_MONEY", "MOOV_MONEY"]),
-                    "currency": "XOF",
+                    "currency": "GNF",
                     "description": f"Paiement {random.choice(purposes).lower()}",
                     "merchant_code": f"MCH{random.randint(100, 999)}"
                 },
@@ -172,7 +172,7 @@ class Command(BaseCommand):
             provider="MPP",
             request_payload={
                 "amount": str(transaction.amount),
-                "currency": "XOF",
+                "currency": "GNF",
                 "reference": transaction.reference,
                 "phone": transaction.details.get("sender_phone", ""),
                 "description": transaction.purpose,

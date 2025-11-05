@@ -70,13 +70,16 @@ class MerchantPaymentDispatcher:
                 "business_id": self.business_id,
                 "channel": self.channel,
                 "external_id": str(self.transaction.reference),
-                "currency": details.get("currency", "XOF"),  # XOF par défaut
+                "currency": details.get("currency", "GNF"),  # XOF par défaut
                 "category": details.get("category", "payment"),  # payment par défaut
                 "amount": float(self.transaction.amount),
                 "msisdn": msisdn,  # REQUIS - pas de valeur par défaut
-                # Champs optionnels
-                "account_number": details.get("account_number", ""),
             }
+            
+            # Ajouter account_number seulement s'il est fourni (pour éviter les strings vides)
+            account_number = details.get("account_number")
+            if account_number:
+                payload["account_number"] = account_number
             
             # 3. Envoyer la transaction
             url = f"{self.BASE_URL}/api/v1/transaction"
@@ -94,7 +97,10 @@ class MerchantPaymentDispatcher:
                 )
             
             # 4. Traiter la réponse
-            response_data = response.json() if response.status_code < 400 else {}
+            try:
+                response_data = response.json()
+            except Exception:
+                response_data = {"error": f"Non-JSON response: {response.text}"}
             
             return {
                 "status_code": response.status_code,

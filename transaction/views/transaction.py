@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from asgiref.sync import sync_to_async
 
 from transaction.filters import TransactionFilter
 from transaction.models import PaymentProviderLog, Transaction
@@ -113,7 +114,7 @@ vous recevrez une réponse immédiate, puis un callback sur votre webhook.
   "details": {
     "order_id": "CMD-12345",
     "customer_name": "Jean Dupont",
-    "currency": "XOF",
+    "currency": "GNF",
     "category": "payment"
   }
 }
@@ -136,7 +137,7 @@ vous recevrez une réponse immédiate, puis un callback sur votre webhook.
                                 "service": "Achat boutique en ligne",
                                 "order_id": "CMD-12345",
                                 "customer_name": "Jean Dupont",
-                                "currency": "XOF",
+                                "currency": "GNF",
                                 "category": "payment"
                             },
                             "created_at": "2025-11-04T14:32:00Z"
@@ -185,26 +186,46 @@ vous recevrez une réponse immédiate, puis un callback sur votre webhook.
 
         def launch_dispatch_background(transaction):
             async def launch_dispatch():
-                dispatcher = MerchantPaymentDispatcher(transaction)
-                response = await dispatcher.dispatch()
+                try:
+                    print(f"🚀 Début dispatch pour {transaction.reference}")
+                    dispatcher = MerchantPaymentDispatcher(transaction)
+                    print(f"🔑 MPP_SECRET_ID: {dispatcher.secret_id}")
+                    print(f"🔑 MPP_SECRET_KEY: {dispatcher.secret_key}")
+                    print(f"🔑 MPP_BUSINESS_ID: {dispatcher.business_id}")
+                    print(f"🔑 MPP_BASE_URL: {dispatcher.BASE_URL}")
+                    response = await dispatcher.dispatch()
+                    
+                    print(f"📡 Réponse MPP - Status: {response['status_code']}")
+                    print(f"📡 Payload envoyé:")
+                    import json
+                    print(json.dumps(response['payload_sent'], indent=2))
+                    print(f"📡 Réponse MPP:")
+                    print(json.dumps(response['json'], indent=2))
 
-                PaymentProviderLog.objects.update_or_create(
-                    transaction=transaction,
-                    defaults={
-                        "request_payload": response["payload_sent"],
-                        "response_payload": response["json"],
-                        "http_status": response["status_code"],
-                        "status": "SENT"
-                        if response["status_code"] in (200, 202)
-                        else "FAILED",
-                        "sent_at": now(),
-                        "provider": "MPP",
-                    },
-                )
+                    # Utiliser sync_to_async pour appeler l'ORM Django depuis async
+                    await sync_to_async(PaymentProviderLog.objects.update_or_create)(
+                        transaction=transaction,
+                        defaults={
+                            "request_payload": response["payload_sent"],
+                            "response_payload": response["json"],
+                            "http_status": response["status_code"],
+                            "status": "SENT"
+                            if response["status_code"] in (200, 202)
+                            else "FAILED",
+                            "sent_at": now(),
+                            "provider": "MPP",
+                        },
+                    )
+                    print(f"✅ PaymentProviderLog créé pour {transaction.reference}")
+                    
+                except Exception as e:
+                    print(f"❌ Erreur dispatch: {e}")
+                    import traceback
+                    traceback.print_exc()
 
             asyncio.run(launch_dispatch())
 
-        threading.Thread(target=launch_dispatch_background, args=(transaction,)).start()
+        threading.Thread(target=launch_dispatch_background, args=(transaction,), daemon=True).start()
 
         return Response(
             {

@@ -15,7 +15,7 @@ class TransactionCreateSerializer(serializers.Serializer):
         help_text="Description du service/produit"
     )
     details = serializers.DictField(
-        help_text="Données additionnelles (order_id, customer_name, etc.)",
+        help_text="Données additionnelles : first_name, last_name, account_number, currency (XOF par défaut), category (payment par défaut), order_id, etc.",
         required=False
     )
     

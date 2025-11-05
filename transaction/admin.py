@@ -16,9 +16,9 @@ from django_json_widget.widgets import JSONEditorWidget
 from rangefilter.filters import DateRangeFilter
 
 from transaction.models import Transaction
-from transaction.utils import ExternalTransactionDispatcher
+from transaction.utils import MerchantPaymentDispatcher
 
-from .models import InTouchLog
+from .models import PaymentProviderLog
 
 admin.site.site_header = "CRPAY-ADMIN"
 admin.site.site_title = "CRPAY-ADMIN"
@@ -277,8 +277,8 @@ class TransactionAdmin(admin.ModelAdmin):
         return TemplateResponse(request, "admin/transaction/stats.html", context)
 
 
-@admin.register(InTouchLog)
-class InTouchLogAdmin(admin.ModelAdmin):
+@admin.register(PaymentProviderLog)
+class PaymentProviderLogAdmin(admin.ModelAdmin):
     list_display = (
         "reference_transaction",
         "statut",
@@ -393,7 +393,7 @@ class InTouchLogAdmin(admin.ModelAdmin):
     def relancer_envoi_intouch(self, request, queryset):
         count = 0
         for log in queryset:
-            dispatcher = ExternalTransactionDispatcher(log.transaction)
+            dispatcher = MerchantPaymentDispatcher(log.transaction)
             response = asyncio.run(dispatcher.dispatch())
 
             if response.status_code == 200:

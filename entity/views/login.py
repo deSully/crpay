@@ -12,11 +12,29 @@ class EntityLoginView(APIView):
     permission_classes = [AllowAny]
 
     @swagger_auto_schema(
-        operation_summary="Connexion via username et mot de passe",
+        operation_summary="Authentification - Obtenir les tokens d'accès",
         operation_description="""
-Permet à un utilisateur de se connecter en fournissant un username et un mot de passe.
-Retourne un token JWT (access + refresh) ainsi que les informations de l'entité liée.
+Authentifiez-vous avec vos identifiants pour obtenir les tokens JWT nécessaires aux appels API.
+
+**Processus :**
+1. Envoyez vos identifiants (username et password)
+2. Recevez un **access token** (validité : 15 min) et un **refresh token** (validité : 1 jour)
+3. Utilisez l'access token dans le header : `Authorization: Bearer <access_token>`
+
+**Exemple de requête :**
+```json
+{
+  "username": "votre_username",
+  "password": "votre_password"
+}
+```
+
+**Important :**
+- Conservez le refresh token en sécurité pour renouveler l'access token
+- L'access token doit être inclus dans toutes vos requêtes API
+- Seules les entités de type CLIENT ou INTERNAL peuvent se connecter via l'API
 """,
+        tags=["🔐 Authentification"],
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             required=["username", "password"],
@@ -42,10 +60,20 @@ Retourne un token JWT (access + refresh) ainsi que les informations de l'entité
                             properties={
                                 "code": openapi.Schema(type=openapi.TYPE_STRING),
                                 "name": openapi.Schema(type=openapi.TYPE_STRING),
-                                "email": openapi.Schema(type=openapi.TYPE_STRING),
                                 "phone": openapi.Schema(type=openapi.TYPE_STRING),
+                                "country": openapi.Schema(type=openapi.TYPE_STRING),
                                 "entity_type": openapi.Schema(type=openapi.TYPE_STRING),
                                 "is_active": openapi.Schema(type=openapi.TYPE_BOOLEAN),
+                                "created_at": openapi.Schema(
+                                    type=openapi.TYPE_STRING, format="date-time"
+                                ),
+                            },
+                        ),
+                        "user": openapi.Schema(
+                            type=openapi.TYPE_OBJECT,
+                            properties={
+                                "username": openapi.Schema(type=openapi.TYPE_STRING),
+                                "email": openapi.Schema(type=openapi.TYPE_STRING),
                                 "date_joined": openapi.Schema(
                                     type=openapi.TYPE_STRING, format="date-time"
                                 ),
@@ -54,10 +82,6 @@ Retourne un token JWT (access + refresh) ainsi que les informations de l'entité
                                     format="date-time",
                                     nullable=True,
                                 ),
-                                "created_at": openapi.Schema(
-                                    type=openapi.TYPE_STRING, format="date-time"
-                                ),
-                                "username": openapi.Schema(type=openapi.TYPE_STRING),
                             },
                         ),
                     },
@@ -121,15 +145,18 @@ Retourne un token JWT (access + refresh) ainsi que les informations de l'entité
                 "entity": {
                     "code": entity.code,
                     "name": entity.name,
-                    "email": entity.email,
                     "phone": entity.phone,
+                    "country": entity.country,
                     "entity_type": entity.entity_type,
                     "is_active": entity.is_active,
-                    "date_joined": entity.date_joined,
-                    "last_login": entity.last_login,
                     "created_at": entity.created_at,
-                    "username": entity.username,
                 },
+                "user": {
+                    "username": user.username,
+                    "email": user.email,
+                    "date_joined": user.date_joined,
+                    "last_login": user.last_login,
+                }
             },
             status=status.HTTP_200_OK,
         )

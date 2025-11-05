@@ -51,6 +51,8 @@ class Command(BaseCommand):
             last_name="ASSINONVO",
             entity=entity,
         )
+        user.set_password(password)
+        user.save()
 
         self.stdout.write(self.style.SUCCESS("✅ Entité + superutilisateur créés avec succès"))
         self.stdout.write(f"📧 Email utilisateur : {user.email}")

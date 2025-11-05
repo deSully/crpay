@@ -12,10 +12,10 @@ def send_entity_init_email(user, password):
 
 👤 Nom complet : {user.first_name} {user.last_name}
 📧 Email       : {user.email}
-📱 Téléphone   : {user.phone}
-🏷️  Code       : {user.code}
+📱 Téléphone   : {user.entity.phone if user.entity else 'N/A'}
+🏷️  Code       : {user.entity.code if user.entity else 'N/A'}
 🔐 Mot de passe : {password}
-🆔 ID Entité   : {user.entity_id}
+🆔 ID Entité   : {user.entity.entity_id if user.entity else 'N/A'}
 
 Connectez-vous au système pour configurer les autres paramètres de sécurité.
         """.strip()

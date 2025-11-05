@@ -9,3 +9,4 @@ httpx
 django-json-widget
 django-admin-rangefilter
 ruff
+django_crontab

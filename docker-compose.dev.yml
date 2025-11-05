@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT}:5432"
+    env_file:
+      - .env
+    networks:
+      - dev-network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-dev.conf:/etc/nginx/nginx.conf:ro
+      - ./staticfiles:/app/staticfiles:ro
+      - ./media:/app/media:ro
+    depends_on:
+      - web
+    networks:
+      - dev-network
+
+  web:
+    build: .
+    command: >
+      sh -c "
+        python manage.py migrate && \
+        python manage.py collectstatic --noinput && \
+        python manage.py create_dev_admin && \
+        python manage.py generate_fake_data --clear --count 5000 && \
+        python manage.py runserver 0.0.0.0:8000
+      "
+    volumes:
+      - .:/app
+      - ./staticfiles:/app/staticfiles
+      - ./media:/app/media
+    expose:
+      - "8000"
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${DB_PORT}/${POSTGRES_DB}
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - dev-network
+
+volumes:
+  postgres_data_dev:
+
+networks:
+  dev-network:
+    driver: bridge

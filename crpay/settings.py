@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-g)w9d0yb+m092r(u1l88gp)k2v4xs)nn3qrh9yl#pv=e+n%ov4"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     "django_json_widget",
     "rangefilter",
     "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",  # Blacklist pour JWT
     "drf_yasg",
+    "django_crontab",  # Tâches planifiées
     "entity",
     "transaction",
     "app",
@@ -83,16 +85,25 @@ WSGI_APPLICATION = "crpay.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_DB"),
-        "USER": os.getenv("POSTGRES_USER"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": "db",
-        "PORT": os.getenv("DB_PORT"),
+# En mode DEBUG (local), utiliser SQLite. En production (Docker), utiliser PostgreSQL
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("POSTGRES_DB"),
+            "USER": os.getenv("POSTGRES_USER"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+            "HOST": "db",
+            "PORT": os.getenv("DB_PORT"),
+        }
+    }
 
 
 # Password validation
@@ -117,17 +128,21 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "fr"
-
+LANGUAGE_CODE = "fr-fr"
+TIME_ZONE = "Africa/Abidjan"  # Côte d'Ivoire (UTC+0)
 
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-TIME_ZONE = "UTC"
 
-USE_I18N = True
+LANGUAGES = [
+    ('fr', 'Français'),
+    ('en', 'English'),
+]
 
-USE_TZ = True
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 
 # Static files (CSS, JavaScript, Images)
@@ -182,13 +197,55 @@ SIMPLE_JWT = {
 
 AUTH_USER_MODEL = "entity.AppUser"  # Modèle utilisateur personnalisé
 
+# Configuration Swagger/OpenAPI
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': 'Authentification JWT. Format: "Bearer {votre_token}"'
+        }
+    },
+    'USE_SESSION_AUTH': False,
+    'JSON_EDITOR': True,
+    'SUPPORTED_SUBMIT_METHODS': [
+        'get',
+        'post',
+    ],  # Seulement GET et POST pour les partenaires
+    'OPERATIONS_SORTER': 'method',  # Grouper par méthode HTTP
+    'TAGS_SORTER': 'alpha',
+    'DOC_EXPANSION': 'list',  # Afficher la liste des endpoints par défaut
+    'DEEP_LINKING': True,
+    'SHOW_EXTENSIONS': False,  # Masquer les extensions
+    'DEFAULT_MODEL_RENDERING': 'example',  # Afficher les exemples par défaut
+    'DEFAULT_MODEL_DEPTH': 1,  # Réduire la profondeur pour simplifier
+    'PERSIST_AUTH': True,  # Garder l'auth entre les rafraîchissements
+    'DEFAULT_AUTO_SCHEMA_CLASS': 'drf_yasg.inspectors.SwaggerAutoSchema',
+    'SHOW_REQUEST_HEADERS': True,
+    'VALIDATOR_URL': None,  # Désactiver le validateur externe
+}
 
-# Si tu es derrière un proxy comme nginx-proxy
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+REDOC_SETTINGS = {
+    'LAZY_RENDERING': False,
+}
 
-# Force l'utilisation de HTTPS pour les cookies CSRF et SESSION
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
 
-# Autorise les domaines valides
-CSRF_TRUSTED_ORIGINS = ['https://staging.crdigital.tech']
+# Configuration pour développement local (HTTP)
+# Si tu es derrière un proxy comme nginx-proxy (seulement en production)
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Force l'utilisation de HTTPS pour les cookies CSRF et SESSION (seulement en production)
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
+
+# Autorise les domaines valides (seulement en production)
+# CSRF_TRUSTED_ORIGINS = ['https://staging.crdigital.tech']
+
+
+# ==================== CRON JOBS ====================
+# Synchronisation automatique du statut des transactions avec MPP
+CRONJOBS = [
+    # Toutes les 10 minutes : synchronise les transactions PENDING de moins de 24h
+    ('*/10 * * * *', 'django.core.management.call_command', ['sync_transaction_status']),
+]

@@ -13,9 +13,9 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 from transaction.filters import TransactionFilter
-from transaction.models import InTouchLog, Transaction
+from transaction.models import PaymentProviderLog, Transaction
 from transaction.serializers import TransactionSerializer, TransactionCreateSerializer
-from transaction.utils import ExternalTransactionDispatcher
+from transaction.utils import MerchantPaymentDispatcher
 
 
 class TransactionView(APIView):
@@ -24,6 +24,8 @@ class TransactionView(APIView):
     filterset_class = TransactionFilter
     ordering_fields = ["created_at", "amount"]
     ordering = ["-created_at"]
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
 
     def get_queryset(self):
         user = self.request.user
@@ -33,17 +35,44 @@ class TransactionView(APIView):
     
 
     @swagger_auto_schema(
-        operation_summary="Lister les paiements",
-        operation_description="Récupère la liste des paiements associées à l'utilisateur connecté. Les utilisateurs internes voient tous les paiements.",
-        responses={200: TransactionSerializer(many=True)},
+        operation_summary="Lister vos transactions",
+        operation_description="""
+Récupère l'historique de toutes vos transactions.
+
+**Filtres disponibles :**
+- Par date : `created_at__gte=2025-01-01`
+- Par statut : `status=SUCCESS`
+- Par montant : `amount__gte=1000`
+
+**Tri disponible :**
+- Par date : `ordering=-created_at` (plus récent en premier)
+- Par montant : `ordering=-amount`
+
+**Exemple :**
+```
+GET /api/v0/payments/?status=PENDING&ordering=-created_at
+```
+        """,
+        responses={
+            200: TransactionSerializer(many=True),
+            401: "Non authentifié"
+        },
         manual_parameters=[
             openapi.Parameter(
-                'ordering', openapi.IN_QUERY, description="Ordre de tri (ex: -created_at)", type=openapi.TYPE_STRING
+                'ordering', 
+                openapi.IN_QUERY, 
+                description="Tri : -created_at (desc), created_at (asc), -amount, amount", 
+                type=openapi.TYPE_STRING
             ),
             openapi.Parameter(
-                'search', openapi.IN_QUERY, description="Recherche dans les champs autorisés", type=openapi.TYPE_STRING
+                'status', 
+                openapi.IN_QUERY, 
+                description="Filtrer par statut : PENDING, SUCCESS, FAILED", 
+                type=openapi.TYPE_STRING,
+                enum=["PENDING", "SUCCESS", "FAILED"]
             ),
-        ]
+        ],
+        tags=["💳 Paiements"]
     )
 
     def get(self, request, *args, **kwargs):
@@ -56,61 +85,97 @@ class TransactionView(APIView):
         return Response(serializer.data)
 
     @swagger_auto_schema(
-        operation_summary="Créer un paiement",
-        operation_description="Crée un paiement avec les informations fournies, et envoie automatiquement la requête vers le système externe en tâche de fond.",
+        operation_summary="Initier un paiement",
+        operation_description="""
+Crée une nouvelle transaction de paiement. Le traitement est **asynchrone** : 
+vous recevrez une réponse immédiate, puis un callback sur votre webhook.
+
+**Paramètres requis :**
+- `amount` : Montant en XOF (ex: 5000)
+- `phone_number` : Numéro du client au format local (ex: 0770123456)
+- `service` : Type de service (ex: "Achat en ligne", "Paiement facture")
+
+**Paramètres optionnels :**
+- `details` : Objet JSON contenant des données additionnelles (order_id, customer_name, currency, category, etc.)
+
+**Flux de traitement :**
+1. La transaction est créée avec le statut `PENDING`
+2. L'appel au provider de paiement est fait en arrière-plan
+3. Vous recevez un UUID pour suivre la transaction
+4. Le statut final (`SUCCESS` ou `FAILED`) vous sera notifié via callback
+
+**Exemple de requête :**
+```json
+{
+  "amount": 5000,
+  "phone_number": "0770123456",
+  "service": "Achat boutique en ligne",
+  "details": {
+    "order_id": "CMD-12345",
+    "customer_name": "Jean Dupont",
+    "currency": "XOF",
+    "category": "payment"
+  }
+}
+```
+        """,
         request_body=TransactionCreateSerializer,
         responses={
             201: openapi.Response(
-                description="Paiement créé avec succès",
+                description="Transaction créée avec succès",
                 examples={
                     "application/json": {
-                        "message": "Paiement créé avec succès.",
+                        "message": "Transaction créée avec succès.",
                         "transaction": {
                             "uuid": "d66cfb4c-50cd-44bc-9600-ea5f91eaa21b",
                             "reference": "TX-ABCDEF1234",
-                            "amount": "15000.0",
+                            "amount": "5000.0",
                             "status": "PENDING",
                             "details": {
-                                "client_name": "Alice Dupont",
-                                "order_id": "ORD-1023",
-                                "invoice_type": "ACHAT"
+                                "phone_number": "0770123456",
+                                "service": "Achat boutique en ligne",
+                                "order_id": "CMD-12345",
+                                "customer_name": "Jean Dupont",
+                                "currency": "XOF",
+                                "category": "payment"
                             },
-                            "created_at": "2025-06-07T14:32:00Z"
+                            "created_at": "2025-11-04T14:32:00Z"
                         }
                     }
                 }
             ),
-            400: "Erreur de validation"
-        }
+            400: "Paramètres manquants ou invalides",
+            401: "Non authentifié"
+        },
+        tags=["💳 Paiements"]
     )
     def post(self, request, *args, **kwargs):
-        amount = request.data.get("amount")
-        invoice_type = request.data.get("invoice_type")
-        details = request.data.get("details")
-        purpose = request.data.get("purpose")
-
-        if not all([amount, invoice_type, details, purpose]):
+        # Valider avec le serializer
+        serializer = TransactionCreateSerializer(data=request.data)
+        if not serializer.is_valid():
             return Response(
-                {
-                    "error": "Le montant, le type de facture, le type de paiement et les détails sont requis."
-                },
+                {"error": serializer.errors},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        try:
-            amount = float(amount)
-        except ValueError:
-            return Response(
-                {"error": "Le montant doit être un nombre valide."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        # Extraire les données validées
+        amount = serializer.validated_data["amount"]
+        phone_number = serializer.validated_data["phone_number"]
+        service = serializer.validated_data["service"]
+        details = serializer.validated_data.get("details", {})
 
         reference = f"TX-{uuid.uuid4().hex[:10].upper()}"
         entity = request.user.entity
-        full_details = {**details, "invoice_type": invoice_type}
+        
+        # Construire les details avec phone_number pour MPP
+        full_details = {
+            **details, 
+            "service": service, 
+            "phone_number": phone_number
+        }
 
         transaction = Transaction.objects.create(
-            purpose=purpose,
+            purpose=service,
             reference=reference,
             entity=entity,
             amount=amount,
@@ -120,14 +185,10 @@ class TransactionView(APIView):
 
         def launch_dispatch_background(transaction):
             async def launch_dispatch():
-                dispatcher = ExternalTransactionDispatcher(
-                    reference=transaction.reference,
-                    amount=transaction.amount,
-                    details=transaction.details,
-                )
+                dispatcher = MerchantPaymentDispatcher(transaction)
                 response = await dispatcher.dispatch()
 
-                InTouchLog.objects.update_or_create(
+                PaymentProviderLog.objects.update_or_create(
                     transaction=transaction,
                     defaults={
                         "request_payload": response["payload_sent"],
@@ -137,6 +198,7 @@ class TransactionView(APIView):
                         if response["status_code"] in (200, 202)
                         else "FAILED",
                         "sent_at": now(),
+                        "provider": "MPP",
                     },
                 )
 

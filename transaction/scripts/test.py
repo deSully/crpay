@@ -20,14 +20,13 @@ if login_response.status_code == 200:
     }
     for i in range(1000):
         amount = random.randint(200, 3500)
-        purpose = random.choice(["Refund", "Payment"])
+        purpose = random.choice(["Permis de conduire", "Vignette", "Carte grise", "Assurance auto"])
         first_name = random.choice(
             ["Aliou", "Fatou", "Ibrahima", "Mariam", "Seydou", "Aissatou"]
         )
         last_name = random.choice(["Barry", "Diallo", "Bah", "Camara", "Sow", "Sylla"])
         transaction_payload = {
             "amount": amount,
-            "invoice_type": "Payment",
             "purpose": purpose,
             "details": {
                 "recipientFirstName": first_name,

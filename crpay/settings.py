@@ -246,6 +246,6 @@ REDOC_SETTINGS = {
 # ==================== CRON JOBS ====================
 # Synchronisation automatique du statut des transactions avec MPP
 CRONJOBS = [
-    # Toutes les 10 minutes : synchronise les transactions PENDING de moins de 24h
-    ('*/10 * * * *', 'django.core.management.call_command', ['sync_transaction_status']),
+    # Toutes les heures : synchronise les transactions PENDING de moins de 3 jours
+    ('0 * * * *', 'django.core.management.call_command', ['sync_transaction_status']),
 ]

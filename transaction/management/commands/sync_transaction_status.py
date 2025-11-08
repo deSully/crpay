@@ -22,8 +22,8 @@ class Command(BaseCommand):
         parser.add_argument(
             '--max-age-hours',
             type=int,
-            default=24,
-            help='Synchroniser uniquement les transactions de moins de X heures (défaut: 24h)'
+            default=72,
+            help='Synchroniser uniquement les transactions de moins de X heures (défaut: 72h = 3 jours)'
         )
 
     def handle(self, *args, **options):

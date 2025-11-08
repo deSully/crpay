@@ -102,12 +102,21 @@ class MerchantPaymentDispatcher:
             except Exception:
                 response_data = {"error": f"Non-JSON response: {response.text}"}
             
+            # Détecter les erreurs via le champ "success"
+            success = response_data.get("success", True)
+            mpp_status = response_data.get("data", {}).get("status", "unknown")
+            
+            # Si success=false, c'est une erreur de validation ou autre
+            if not success:
+                mpp_status = "failed"
+            
             return {
                 "status_code": response.status_code,
                 "json": response_data,
                 "payload_sent": payload,
-                "external_id": response_data.get("data", {}).get("id"),  # ID de la transaction côté MPP
-                "mpp_status": response_data.get("data", {}).get("status", "unknown")
+                "mpp_transaction_id": response_data.get("data", {}).get("id"),  # ID de la transaction côté MPP
+                "mpp_status": mpp_status,
+                "success": success
             }
             
         except Exception as e:
@@ -115,7 +124,8 @@ class MerchantPaymentDispatcher:
                 "status_code": 500,
                 "json": {"error": str(e)},
                 "payload_sent": payload if 'payload' in locals() else {},
-                "external_id": None,
-                "mpp_status": "error"
+                "mpp_transaction_id": None,
+                "mpp_status": "failed",
+                "success": False
             }
 

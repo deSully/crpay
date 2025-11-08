@@ -1,8 +1,12 @@
-import asyncio
-import httpx
+import json
 import os
+import urllib.request
+import urllib.parse
+import urllib.error
+
 from django.core.management.base import BaseCommand
 from django.core.cache import cache
+
 from transaction.models import Transaction
 
 
@@ -31,7 +35,7 @@ class Command(BaseCommand):
             try:
                 transaction = Transaction.objects.get(uuid=transaction_id)
                 self.stdout.write(f"Synchronisation de {transaction.reference}...")
-                asyncio.run(self.sync_transaction(transaction))
+                self.sync_transaction(transaction)
             except Transaction.DoesNotExist:
                 self.stdout.write(self.style.ERROR(f"Transaction {transaction_id} introuvable"))
         else:
@@ -49,67 +53,87 @@ class Command(BaseCommand):
             self.stdout.write(f"🔄 {count} transaction(s) PENDING à synchroniser...")
             
             for transaction in pending_transactions:
-                asyncio.run(self.sync_transaction(transaction))
+                self.sync_transaction(transaction)
             
             self.stdout.write(self.style.SUCCESS(f"✅ Synchronisation terminée: {count} transaction(s) vérifiée(s)"))
 
-    async def sync_transaction(self, transaction):
+    def sync_transaction(self, transaction):
         """
         Récupère le statut d'une transaction depuis MPP et met à jour
         """
         try:
+            # 0. Vérifier qu'on a l'ID MPP
+            details = transaction.details or {}
+            mpp_transaction_id = details.get("mpp_transaction_id")
+            
+            if not mpp_transaction_id:
+                self.stdout.write(
+                    self.style.WARNING(
+                        f"⚠️  {transaction.reference}: Pas d'ID MPP trouvé (transaction pas encore envoyée à MPP?)"
+                    )
+                )
+                return
+            
             # 1. S'authentifier
-            access_token = await self.get_access_token()
+            access_token = self.get_access_token()
             
             # 2. Récupérer le statut depuis MPP
             base_url = os.getenv("MPP_BASE_URL", "https://gateway.mpp.bnbcash.app")
-            url = f"{base_url}/api/v1/transaction/{transaction.reference}/get-status"
+            url = f"{base_url}/api/v1/transaction/{mpp_transaction_id}/get-status"
             
             headers = {
                 "Authorization": f"Bearer {access_token}",
                 "Content-Type": "application/json"
             }
             
-            async with httpx.AsyncClient() as client:
-                response = await client.get(url, headers=headers, timeout=30.0)
+            # GET request avec urllib
+            req = urllib.request.Request(url, headers=headers, method='GET')
             
-            if response.status_code == 200:
-                data = response.json()
-                mpp_status = data.get("data", {}).get("status", "unknown")
-                
-                # 3. Mapper le statut MPP vers notre statut
-                new_status = self.map_mpp_status(mpp_status)
-                
-                if new_status != transaction.status:
-                    old_status = transaction.status
-                    transaction.status = new_status
-                    transaction.save(update_fields=["status", "updated_at"])
+            try:
+                with urllib.request.urlopen(req, timeout=30) as response:
+                    response_data = json.loads(response.read().decode('utf-8'))
                     
-                    self.stdout.write(
-                        self.style.SUCCESS(
-                            f"✅ {transaction.reference}: {old_status} → {new_status} (MPP: {mpp_status})"
+                    mpp_status = response_data.get("data", {}).get("status", "unknown")
+                    
+                    # 3. Mapper le statut MPP vers notre statut
+                    new_status = self.map_mpp_status(mpp_status)
+                    
+                    if new_status != transaction.status:
+                        old_status = transaction.status
+                        transaction.status = new_status
+                        
+                        # Mettre à jour aussi le statut MPP dans details
+                        details["mpp_status"] = mpp_status
+                        transaction.details = details
+                        
+                        transaction.save(update_fields=["status", "details", "updated_at"])
+                        
+                        self.stdout.write(
+                            self.style.SUCCESS(
+                                f"✅ {transaction.reference}: {old_status} → {new_status} (MPP: {mpp_status})"
+                            )
                         )
+                    else:
+                        self.stdout.write(f"   {transaction.reference}: Aucun changement ({transaction.status})")
+                        
+            except urllib.error.HTTPError as e:
+                if e.code == 404:
+                    self.stdout.write(
+                        self.style.WARNING(f"⚠️  {transaction.reference}: Transaction introuvable sur MPP (ID: {mpp_transaction_id})")
                     )
                 else:
-                    self.stdout.write(f"   {transaction.reference}: Aucun changement ({transaction.status})")
-            
-            elif response.status_code == 404:
-                self.stdout.write(
-                    self.style.WARNING(f"⚠️  {transaction.reference}: Transaction introuvable sur MPP")
-                )
-            else:
-                self.stdout.write(
-                    self.style.ERROR(
-                        f"❌ {transaction.reference}: Erreur HTTP {response.status_code}"
+                    self.stdout.write(
+                        self.style.ERROR(
+                            f"❌ {transaction.reference}: Erreur HTTP {e.code}"
+                        )
                     )
-                )
         
         except Exception as e:
             self.stdout.write(
                 self.style.ERROR(f"❌ {transaction.reference}: Erreur - {str(e)}")
             )
 
-    async def get_access_token(self):
+    def get_access_token(self):
         """
         Obtenir un token MPP (avec cache)
         """
@@ -125,16 +149,24 @@ class Command(BaseCommand):
             "secret_key": os.environ["MPP_SECRET_KEY"]
         }
         
-        async with httpx.AsyncClient() as client:
-            response = await client.post(url, json=payload, timeout=30.0)
-            
-            if response.status_code == 200:
-                data = response.json()
-                access_token = data["data"]["access_token"]
+        # POST request avec urllib
+        data = json.dumps(payload).encode('utf-8')
+        req = urllib.request.Request(
+            url, 
+            data=data,
+            headers={'Content-Type': 'application/json'},
+            method='POST'
+        )
+        
+        try:
+            with urllib.request.urlopen(req, timeout=30) as response:
+                response_data = json.loads(response.read().decode('utf-8'))
+                access_token = response_data["data"]["access_token"]
                 cache.set(cache_key, access_token, 25 * 60)  # 25 minutes
                 return access_token
-            else:
-                raise Exception(f"Authentication failed: {response.text}")
+        except urllib.error.HTTPError as e:
+            error_body = e.read().decode('utf-8')
+            raise Exception(f"Authentication failed: {error_body}")
 
     def map_mpp_status(self, mpp_status):
         """

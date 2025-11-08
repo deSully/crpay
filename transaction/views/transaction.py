@@ -202,21 +202,64 @@ vous recevrez une réponse immédiate, puis un callback sur votre webhook.
                     print(f"📡 Réponse MPP:")
                     print(json.dumps(response['json'], indent=2))
 
+                    # Vérifier si la requête a échoué (success: false)
+                    if response.get("success") is False:
+                        # Échec de validation ou erreur MPP
+                        transaction.status = "FAILED"
+                        transaction_details = transaction.details or {}
+                        transaction_details["mpp_status"] = "failed"
+                        transaction_details["mpp_error"] = response["json"].get("error", {})
+                        transaction.details = transaction_details
+                        await sync_to_async(transaction.save)(update_fields=["status", "details"])
+                        print(f"❌ Transaction marquée FAILED - Erreur MPP: {response['json'].get('message')}")
+                    
+                    # Sauvegarder l'ID MPP dans transaction.details si disponible
+                    elif response.get("mpp_transaction_id"):
+                        transaction_details = transaction.details or {}
+                        transaction_details["mpp_transaction_id"] = response["mpp_transaction_id"]
+                        transaction_details["mpp_status"] = response.get("mpp_status", "unknown")
+                        transaction.details = transaction_details
+                        
+                        # Mapper le statut MPP immédiatement si c'est un statut final
+                        mpp_status = response.get("mpp_status", "").lower()
+                        status_mapping = {
+                            "completed": "SUCCESS",
+                            "failed": "FAILED",
+                            "rejected": "FAILED",
+                            "cancelled": "FAILED",
+                        }
+                        
+                        if mpp_status in status_mapping:
+                            new_status = status_mapping[mpp_status]
+                            transaction.status = new_status
+                            await sync_to_async(transaction.save)(update_fields=["details", "status"])
+                            print(f"💾 MPP ID sauvegardé: {response['mpp_transaction_id']} - Statut mis à jour: {new_status}")
+                        else:
+                            await sync_to_async(transaction.save)(update_fields=["details"])
+                            print(f"💾 MPP ID sauvegardé: {response['mpp_transaction_id']} - Statut reste PENDING")
+                    
                     # Utiliser sync_to_async pour appeler l'ORM Django depuis async
+                    # Déterminer le statut du log
+                    log_status = "FAILED"
+                    if response.get("success") is False:
+                        log_status = "FAILED"
+                    elif response["status_code"] in (200, 202):
+                        log_status = "SENT"
+                    else:
+                        log_status = "FAILED"
+                    
                     await sync_to_async(PaymentProviderLog.objects.update_or_create)(
                         transaction=transaction,
                         defaults={
                             "request_payload": response["payload_sent"],
                             "response_payload": response["json"],
                             "http_status": response["status_code"],
-                            "status": "SENT"
-                            if response["status_code"] in (200, 202)
-                            else "FAILED",
+                            "status": log_status,
                             "sent_at": now(),
                             "provider": "MPP",
                         },
                     )
-                    print(f"✅ PaymentProviderLog créé pour {transaction.reference}")
+                    print(f"✅ PaymentProviderLog créé pour {transaction.reference} - Statut: {log_status}")
                     
                 except Exception as e:
                     print(f"❌ Erreur dispatch: {e}")
